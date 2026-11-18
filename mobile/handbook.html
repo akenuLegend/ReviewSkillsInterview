@@ -1,0 +1,1572 @@
+<title>Embedded Interview Handbook</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+:root{
+  --bg:#f6f6f3; --surface:#ffffff; --surface-2:#fafaf8; --text:#1c1c1e; --muted:#5d6168; --border:#e2e2dd;
+  --accent:#1f5fd1; --basic:#16803c; --adv:#b25d06; --deep:#7337d6; --warn:#b42318;
+  --code-bg:#f1f2f4; --code-text:#1f2329; --shadow:0 1px 2px rgba(0,0,0,.05); --scrim:rgba(20,22,26,.45);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#111214; --surface:#1a1b1e; --surface-2:#1f2024; --text:#e9e9ec; --muted:#a2a5ad; --border:#2d2f34;
+    --accent:#7aa7ff; --basic:#4fd17f; --adv:#f5b14a; --deep:#b99cff; --warn:#ff8a80;
+    --code-bg:#24262b; --code-text:#e6e6e6; --shadow:none; --scrim:rgba(0,0,0,.6); color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#111214; --surface:#1a1b1e; --surface-2:#1f2024; --text:#e9e9ec; --muted:#a2a5ad; --border:#2d2f34;
+  --accent:#7aa7ff; --basic:#4fd17f; --adv:#f5b14a; --deep:#b99cff; --warn:#ff8a80;
+  --code-bg:#24262b; --code-text:#e6e6e6; --shadow:none; --scrim:rgba(0,0,0,.6); color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--text);font:15.5px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
+a{color:var(--accent)}
+code,pre,.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace}
+code{background:var(--code-bg);color:var(--code-text);padding:.1em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code-bg);color:var(--code-text);padding:12px 14px;border-radius:8px;overflow-x:auto;font-size:13px;line-height:1.55;margin:10px 0;border:1px solid var(--border)}
+pre code{background:none;padding:0;font-size:inherit}
+.layout{display:grid;grid-template-columns:270px minmax(0,1fr);max-width:1280px;margin:0 auto}
+nav.toc{position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 16px 40px;border-right:1px solid var(--border)}
+nav.toc h4{margin:16px 0 4px;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+nav.toc a{display:flex;justify-content:space-between;gap:8px;padding:4px 8px;border-radius:6px;text-decoration:none;color:var(--text);font-size:14px}
+nav.toc a:hover{background:var(--surface)}
+nav.toc a.done::after{content:"✓";color:var(--basic);font-weight:700}
+.brand{font-weight:700;font-size:15px;margin-bottom:6px}
+main{padding-block:24px 80px;padding-left:max(28px,env(safe-area-inset-left,0px));padding-right:max(28px,env(safe-area-inset-right,0px));min-width:0}
+header.hero{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px 24px;box-shadow:var(--shadow)}
+header.hero h1{margin:0 0 6px;font-size:26px;line-height:1.25}
+header.hero p{margin:4px 0;color:var(--muted)}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:14px}
+.toolbar button,.toolbar input{font:inherit;font-size:14px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);border-radius:999px;padding:5px 13px;cursor:pointer}
+.toolbar input{border-radius:8px;cursor:text;min-width:0;flex:1 1 200px;max-width:320px}
+.toolbar button[aria-pressed="true"]{background:var(--text);color:var(--bg);border-color:var(--text)}
+.progress{margin-top:14px;font-size:14px;color:var(--muted)}
+.bar{height:6px;background:var(--border);border-radius:99px;overflow:hidden;margin-top:6px}
+.bar>span{display:block;height:100%;width:0;background:var(--basic);transition:width .3s}
+.group-title{margin:40px 0 8px;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+section.skill{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px 24px;margin:16px 0;box-shadow:var(--shadow);scroll-margin-top:12px}
+section.skill>h2{margin:0;font-size:22px;display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+section.skill>h2 .num{font-size:13px;color:var(--muted);font-weight:600}
+.donebox{margin-left:auto;font-size:13px;font-weight:500;color:var(--muted);display:flex;gap:6px;align-items:center;cursor:pointer}
+.lead{color:var(--muted);margin:6px 0 4px}
+.lvl{margin-top:18px;padding-left:14px;border-left:3px solid var(--border)}
+.lvl.basic{border-left-color:var(--basic)} .lvl.adv{border-left-color:var(--adv)} .lvl.deep{border-left-color:var(--deep)}
+.lvl>h3,.qa>h3,.cv>h3{margin:0 0 6px;font-size:16.5px;display:flex;align-items:center;gap:8px}
+h4.sub{margin:14px 0 4px;font-size:15px}
+.tag{font-size:11.5px;font-weight:700;padding:2px 9px;border-radius:99px;letter-spacing:.03em;white-space:nowrap}
+.tag.b{color:var(--basic);background:color-mix(in srgb,var(--basic) 14%,transparent)}
+.tag.a{color:var(--adv);background:color-mix(in srgb,var(--adv) 14%,transparent)}
+.tag.d{color:var(--deep);background:color-mix(in srgb,var(--deep) 14%,transparent)}
+.tag.q{color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,transparent)}
+ul,ol{padding-left:22px;margin:6px 0} li{margin:3px 0}
+.tbl{overflow-x:auto;margin:10px 0}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{border:1px solid var(--border);padding:6px 9px;text-align:left;vertical-align:top}
+th{background:var(--surface-2);font-weight:600}
+.note{background:color-mix(in srgb,var(--accent) 8%,transparent);border:1px solid color-mix(in srgb,var(--accent) 25%,transparent);border-radius:8px;padding:9px 12px;margin:10px 0;font-size:14.5px}
+.warn{background:color-mix(in srgb,var(--warn) 8%,transparent);border:1px solid color-mix(in srgb,var(--warn) 28%,transparent);border-radius:8px;padding:9px 12px;margin:10px 0;font-size:14.5px}
+.qa{margin-top:20px}
+details{border:1px solid var(--border);border-radius:8px;margin:6px 0;background:var(--surface-2)}
+details>summary{cursor:pointer;padding:8px 12px;font-weight:600;list-style:none}
+details>summary::-webkit-details-marker{display:none}
+details>summary::before{content:"▸";display:inline-block;width:1.1em;color:var(--muted);transition:transform .15s}
+details[open]>summary::before{transform:rotate(90deg)}
+details>div{padding:2px 14px 10px 30px}
+.cv{margin-top:18px;background:color-mix(in srgb,var(--deep) 7%,transparent);border-radius:10px;padding:12px 16px}
+.src{margin-top:14px;font-size:13.5px;color:var(--muted)}
+.src a{word-break:break-word}
+/* diagrams */
+.frame{display:flex;flex-wrap:wrap;gap:3px;margin:10px 0;font-size:12px;font-family:ui-monospace,Menlo,Consolas,monospace}
+.frame span{border:1px solid var(--border);border-radius:5px;padding:5px 7px;text-align:center;background:var(--surface-2);flex:1 1 auto}
+.frame span b{display:block;font-size:12.5px}
+.frame .k1{background:color-mix(in srgb,var(--basic) 16%,transparent)}
+.frame .k2{background:color-mix(in srgb,var(--adv) 16%,transparent)}
+.frame .k3{background:color-mix(in srgb,var(--deep) 16%,transparent)}
+.frame .k4{background:color-mix(in srgb,var(--accent) 16%,transparent)}
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:10px 0;font-size:13.5px}
+.flow span{border:1px solid var(--border);background:var(--surface-2);border-radius:6px;padding:4px 9px}
+.flow i{font-style:normal;color:var(--muted)}
+.mem{display:grid;grid-template-columns:1fr;max-width:420px;margin:10px 0;font-size:13px}
+.mem div{border:1px solid var(--border);border-bottom:none;padding:5px 10px;display:flex;justify-content:space-between;gap:10px;background:var(--surface-2)}
+.mem div:last-child{border-bottom:1px solid var(--border)}
+.mem small{color:var(--muted)}
+svg.wave{width:100%;max-width:640px;height:auto;display:block;margin:8px 0;color:var(--text)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.card{border:1px solid var(--border);border-radius:10px;padding:10px 14px;background:var(--surface-2)}
+.card h5{margin:0 0 4px;font-size:14.5px}
+/* filters */
+body.f-basic .lvl:not(.basic), body.f-basic .qa, body.f-basic .cv{display:none}
+body.f-adv .lvl:not(.adv), body.f-adv .qa, body.f-adv .cv{display:none}
+body.f-deep .lvl:not(.deep), body.f-deep .qa, body.f-deep .cv{display:none}
+body.f-qa .lvl{display:none}
+.hidden{display:none!important}
+.mobile-toc{display:none}
+@media (max-width:960px){
+  .layout{grid-template-columns:1fr}
+  nav.toc{display:none}
+  .mobile-toc{display:block;margin:12px 0 0}
+  main{padding-block:16px 72px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  section.skill{padding:16px}
+  header.hero{padding:16px}
+  header.hero h1{font-size:21px}
+  .donebox{margin-left:0}
+  .mobile-toc .links{display:flex;flex-wrap:wrap;gap:6px;padding:8px 12px 12px}
+  .mobile-toc .links a{font-size:13.5px;padding:3px 9px;border:1px solid var(--border);border-radius:99px;text-decoration:none;color:var(--text)}
+}
+
+/* ---- touch / phone / tablet ---- */
+.mbar{display:none}
+#drawer{position:fixed;inset:0;z-index:20;background:var(--scrim)}
+#drawer .panel{position:absolute;top:0;bottom:0;left:0;width:min(320px,86vw);background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding-top:calc(14px + env(safe-area-inset-top,0px));padding-bottom:calc(24px + env(safe-area-inset-bottom,0px));
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:16px;border-right:1px solid var(--border)}
+#drawer nav.toc{display:block;position:static;height:auto;border:none;padding:0;overflow:visible}
+#drawer nav.toc a{padding:9px 10px;font-size:15px}
+#drawer .close{float:right;font:inherit;font-size:16px;width:40px;height:40px;border:1px solid var(--border);border-radius:8px;background:var(--surface-2);color:var(--text);cursor:pointer}
+#toTop{position:fixed;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:8;
+  width:46px;height:46px;border-radius:50%;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:19px;cursor:pointer;box-shadow:0 2px 8px var(--scrim)}
+button:focus-visible,select:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (max-width:960px){
+  body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+  .mbar{display:flex;position:sticky;top:env(safe-area-inset-top,0px);z-index:9;gap:8px;align-items:center;
+    padding-block:8px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+    background:var(--surface);border-bottom:1px solid var(--border)}
+  .mbar button,.mbar select{font:inherit;font-size:14px;min-height:40px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);border-radius:8px;padding:0 12px}
+  .mbar .t{flex:1;min-width:0;font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mbar .t small{display:block;font-weight:500;color:var(--muted);font-size:12px}
+  .mobile-toc{display:none}
+  section.skill{scroll-margin-top:calc(66px + env(safe-area-inset-top,0px))}
+  details>summary{padding:12px 14px;line-height:1.45}
+  details>div{padding:2px 14px 12px 16px}
+  pre{font-size:12.5px}
+  .donebox{padding:6px 10px;border:1px solid var(--border);border-radius:8px}
+  .donebox input{width:20px;height:20px}
+  .toolbar button{min-height:38px}
+  .lvl{padding-left:11px}
+}
+@media (min-width:961px) and (max-width:1180px){
+  .layout{grid-template-columns:230px minmax(0,1fr)}
+  main{padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+}
+@media print{nav.toc,.toolbar,.mobile-toc{display:none} .layout{display:block} details{break-inside:avoid} details>div{display:block}}
+</style>
+<div class="mbar">
+  <button id="openToc" aria-label="Mở mục lục" aria-controls="drawer">☰ Mục lục</button>
+  <div class="t" id="curSec">Embedded Handbook<small id="curProg">Đã ôn 0/17</small></div>
+  <label for="mlevel" class="hidden">Mức</label>
+  <select id="mlevel" aria-label="Lọc theo mức">
+    <option value="all">Tất cả</option><option value="basic">Cơ bản</option><option value="adv">Nâng cao</option><option value="deep">Chuyên sâu</option><option value="qa">Câu hỏi</option>
+  </select>
+</div>
+<div id="drawer" hidden><div class="panel" role="dialog" aria-label="Mục lục"><button class="close toolbar-like" id="closeToc" aria-label="Đóng">✕</button></div></div>
+<button id="toTop" hidden aria-label="Lên đầu trang">↑</button>
+<div class="layout">
+<nav class="toc" aria-label="Mục lục">
+  <div class="brand">📘 Embedded Interview Handbook</div>
+  <a href="#howto">Cách dùng tài liệu</a>
+  <h4>1 · Ngôn ngữ</h4>
+  <a href="#c">C/C++ (Embedded)</a>
+  <a href="#verilog">Verilog</a>
+  <a href="#asm">Assembly</a>
+  <h4>2 · Thiết kế số</h4>
+  <a href="#logic">Logical Circuit</a>
+  <a href="#cpu">CPU Design</a>
+  <h4>3 · Nền tảng & công cụ</h4>
+  <a href="#stm32">STM32</a>
+  <a href="#esp32">ESP32 / ESP8266 / ESP32-CAM</a>
+  <a href="#arduino">Arduino</a>
+  <a href="#fpga">FPGA</a>
+  <a href="#git">Git / GitHub</a>
+  <h4>4 · Giao tiếp & ngắt</h4>
+  <a href="#can">CAN</a>
+  <a href="#uart">UART</a>
+  <a href="#i2c">I2C</a>
+  <a href="#spi">SPI</a>
+  <a href="#pwm">PWM</a>
+  <a href="#irq">Interrupt</a>
+  <h4>5 · Ngôn ngữ & tổng hợp</h4>
+  <a href="#english">Technical English</a>
+  <a href="#compare">Bảng so sánh giao thức</a>
+  <a href="#auto">Phụ lục: Automotive (từ Experience)</a>
+  <a href="#cvcheck">Ghi chú về CV</a>
+</nav>
+
+<main>
+<header class="hero" id="howto">
+  <h1>Tài liệu ôn phỏng vấn — Fresher Embedded Engineer</h1>
+  <p>Bám sát mục <b>SKILL</b> trong CV. Mỗi kỹ năng chia 3 tầng: <span class="tag b">Cơ bản</span> <span class="tag a">Nâng cao</span> <span class="tag d">Chuyên sâu / vận dụng</span>, kèm <span class="tag q">Câu hỏi phỏng vấn</span> (bấm để xem đáp án gợi ý) và phần <b>Liên hệ CV</b> — nơi người phỏng vấn sẽ hỏi xoáy.</p>
+  <p>Cách ôn: đọc tầng Cơ bản → tự trả lời câu hỏi <i>trước khi</i> mở đáp án → tick “Đã ôn” khi tự giải thích lại được bằng lời của mình.</p>
+  <div class="toolbar" role="toolbar" aria-label="Bộ lọc">
+    <button data-f="all" aria-pressed="true">Tất cả</button>
+    <button data-f="basic">Cơ bản</button>
+    <button data-f="adv">Nâng cao</button>
+    <button data-f="deep">Chuyên sâu</button>
+    <button data-f="qa">Chỉ câu hỏi</button>
+    <button id="toggleAll">Mở/đóng đáp án</button>
+    <input id="search" type="search" placeholder="Tìm: volatile, bit stuffing, CPHA…" aria-label="Tìm kiếm">
+  </div>
+  <div class="progress"><span id="progText">Đã ôn 0/17 kỹ năng</span><div class="bar"><span id="progBar"></span></div></div>
+  <details class="mobile-toc"><summary>Mục lục</summary><div class="links">
+    <a href="#c">C/C++</a><a href="#verilog">Verilog</a><a href="#asm">Assembly</a><a href="#logic">Logic</a><a href="#cpu">CPU</a><a href="#stm32">STM32</a><a href="#esp32">ESP32</a><a href="#arduino">Arduino</a><a href="#fpga">FPGA</a><a href="#git">Git</a><a href="#can">CAN</a><a href="#uart">UART</a><a href="#i2c">I2C</a><a href="#spi">SPI</a><a href="#pwm">PWM</a><a href="#irq">Interrupt</a><a href="#english">English</a><a href="#compare">So sánh</a><a href="#auto">Automotive</a><a href="#cvcheck">Ghi chú CV</a>
+  </div></details>
+</header>
+
+<div class="group-title">1 · Ngôn ngữ lập trình</div>
+
+<!-- ============ C / C++ ============ -->
+<section class="skill" id="c">
+<h2><span class="num">01</span> C/C++ (Embedded) <label class="donebox"><input type="checkbox" data-done="c"> Đã ôn</label></h2>
+<p class="lead">Kỹ năng bị hỏi nhiều nhất trong mọi buổi phỏng vấn Embedded. Trọng tâm: con trỏ, bit manipulation, bộ nhớ, <code>volatile</code>/<code>static</code>/<code>const</code>, và cách C “chạm” vào phần cứng.</p>
+
+<div class="lvl basic"><h3><span class="tag b">Cơ bản</span> Nền tảng ngôn ngữ</h3>
+<h4 class="sub">Kiểu dữ liệu & <code>stdint.h</code></h4>
+<ul>
+<li>Kích thước <code>int</code>, <code>long</code> phụ thuộc kiến trúc/compiler → trong embedded luôn dùng <code>uint8_t, int16_t, uint32_t…</code> để cố định độ rộng.</li>
+<li><code>sizeof</code> là toán tử (tính lúc biên dịch với kiểu thường), trả về <code>size_t</code>.</li>
+<li>Signed dùng bù 2 (two's complement). Tràn <b>signed</b> là <i>undefined behavior</i>; tràn <b>unsigned</b> là quay vòng modulo 2<sup>n</sup> (được định nghĩa).</li>
+</ul>
+<h4 class="sub">Thao tác bit — phải viết được không cần suy nghĩ</h4>
+<script type="text/plain" class="code">
+#define BIT(n)            (1UL << (n))
+#define SET_BIT(r, n)     ((r) |=  BIT(n))
+#define CLEAR_BIT(r, n)   ((r) &= ~BIT(n))
+#define TOGGLE_BIT(r, n)  ((r) ^=  BIT(n))
+#define READ_BIT(r, n)    (((r) >> (n)) & 1UL)
+
+/* Ghi một trường nhiều bit (field) mà không phá các bit khác */
+#define WRITE_FIELD(r, mask, pos, val) \
+    ((r) = ((r) & ~((mask) << (pos))) | (((val) & (mask)) << (pos)))
+
+/* Kinh điển */
+int is_pow2(uint32_t x)      { return x && !(x & (x - 1)); }
+int count_bits(uint32_t x)   { int c = 0; while (x) { x &= x - 1; c++; } return c; } /* Kernighan */
+uint16_t swap16(uint16_t x)  { return (uint16_t)((x << 8) | (x >> 8)); }
+</script>
+<h4 class="sub">Con trỏ & mảng</h4>
+<ul>
+<li>Con trỏ lưu địa chỉ; <code>p + 1</code> tăng theo <code>sizeof(*p)</code>. Mảng khi truyền vào hàm “decay” thành con trỏ → <code>sizeof</code> trong hàm trả về kích thước con trỏ, không phải mảng.</li>
+<li>Đọc khai báo: <code>const int *p</code> (dữ liệu const), <code>int *const p</code> (con trỏ const), <code>const int *const p</code> (cả hai).</li>
+<li>Con trỏ <code>NULL</code>, con trỏ treo (dangling), <code>void*</code> (generic, phải ép kiểu trước khi dereference), con trỏ tới con trỏ.</li>
+<li>Con trỏ hàm: <code>void (*cb)(uint8_t)</code> — nền tảng của callback, bảng vector ngắt, state machine.</li>
+</ul>
+<h4 class="sub"><code>struct</code>, <code>union</code>, <code>enum</code>, <code>typedef</code></h4>
+<ul>
+<li><code>struct</code>: các thành viên nằm nối tiếp (có padding). <code>union</code>: các thành viên dùng chung vùng nhớ, kích thước = thành viên lớn nhất (cộng padding).</li>
+<li><code>enum</code> cho state/mã lỗi → dễ đọc hơn <code>#define</code>, debugger hiển thị được tên.</li>
+</ul>
+<h4 class="sub">Từ khóa lưu trữ (rất hay hỏi)</h4>
+<div class="tbl"><table>
+<tr><th>Từ khóa</th><th>Ý nghĩa</th></tr>
+<tr><td><code>static</code> (biến cục bộ)</td><td>Giữ giá trị giữa các lần gọi; nằm ở <code>.data/.bss</code> chứ không phải stack; khởi tạo một lần.</td></tr>
+<tr><td><code>static</code> (biến/hàm toàn cục)</td><td>Giới hạn phạm vi trong file (internal linkage) → đóng gói module, tránh trùng tên.</td></tr>
+<tr><td><code>extern</code></td><td>Khai báo biến/hàm được định nghĩa ở file khác (không cấp phát bộ nhớ).</td></tr>
+<tr><td><code>const</code></td><td>Không cho sửa qua tên đó; biến <code>const</code> toàn cục thường được đặt vào Flash (<code>.rodata</code>) → tiết kiệm RAM.</td></tr>
+<tr><td><code>volatile</code></td><td>Báo compiler giá trị có thể thay đổi ngoài luồng chương trình → mỗi lần truy cập phải đọc/ghi thật vào bộ nhớ, không được cache vào thanh ghi hay loại bỏ.</td></tr>
+</table></div>
+<h4 class="sub">Bố trí bộ nhớ của chương trình</h4>
+<div class="mem">
+<div><b>Stack</b><small>biến cục bộ, địa chỉ trả về — thường tăng xuống</small></div>
+<div><b>↓ … ↑</b><small>vùng trống</small></div>
+<div><b>Heap</b><small>malloc/new — hạn chế dùng trong embedded</small></div>
+<div><b>.bss</b><small>biến global/static chưa khởi tạo hoặc = 0 (RAM, được xóa về 0 lúc startup)</small></div>
+<div><b>.data</b><small>biến global/static có giá trị khởi tạo (RAM, giá trị đầu copy từ Flash)</small></div>
+<div><b>.rodata</b><small>hằng, chuỗi literal (Flash)</small></div>
+<div><b>.text</b><small>mã lệnh (Flash)</small></div>
+</div>
+<h4 class="sub">Preprocessor</h4>
+<ul>
+<li><code>#define</code>, <code>#ifdef/#ifndef</code>, include guard (<code>#ifndef X_H / #define X_H / #endif</code>) hoặc <code>#pragma once</code>.</li>
+<li>Bẫy macro: <code>#define SQ(x) x*x</code> → <code>SQ(1+2)</code> = <code>1+2*1+2</code> = 5. Sửa: <code>((x)*(x))</code>, nhưng <code>SQ(i++)</code> vẫn tăng <code>i</code> hai lần → dùng <code>static inline</code>.</li>
+</ul>
+<h4 class="sub">Quá trình build</h4>
+<div class="flow"><span>.c</span><i>→ Preprocess →</i><span>.i</span><i>→ Compile →</i><span>.s</span><i>→ Assemble →</i><span>.o</span><i>→ Link (linker script) →</i><span>.elf</span><i>→ objcopy →</i><span>.bin / .hex</span></div>
+</div>
+
+<div class="lvl adv"><h3><span class="tag a">Nâng cao</span> C “chạm” phần cứng</h3>
+<h4 class="sub">Truy cập thanh ghi qua địa chỉ tuyệt đối</h4>
+<script type="text/plain" class="code">
+/* STM32F103: GPIOA base = 0x40010800, ODR offset = 0x0C (theo RM0008) */
+#define GPIOA_ODR  (*(volatile uint32_t *)0x4001080CUL)
+GPIOA_ODR |= (1U << 5);          /* set PA5 */
+
+/* Cách CMSIS làm: struct ánh xạ lên khối thanh ghi */
+typedef struct {
+    volatile uint32_t CRL, CRH, IDR, ODR, BSRR, BRR, LCKR;
+} GPIO_TypeDef;
+#define GPIOA ((GPIO_TypeDef *)0x40010800UL)
+GPIOA->BSRR = (1U << 5);         /* set PA5 nguyên tử (atomic), không cần read-modify-write */
+
+/* Thanh ghi trạng thái chỉ đọc: const volatile */
+const volatile uint32_t *status = (const volatile uint32_t *)0x40013800UL;
+</script>
+<h4 class="sub"><code>volatile</code> — 3 trường hợp bắt buộc</h4>
+<ol><li>Thanh ghi ngoại vi (memory-mapped I/O).</li><li>Biến chia sẻ giữa ISR và chương trình chính.</li><li>Biến chia sẻ giữa các task trong RTOS (kèm cơ chế đồng bộ).</li></ol>
+<div class="warn"><b>volatile ≠ atomic.</b> <code>counter++</code> trên biến volatile vẫn là đọc–sửa–ghi 3 bước, có thể bị ngắt chen giữa. Cần critical section hoặc lệnh atomic (LDREX/STREX trên Cortex-M3/M4).</div>
+<h4 class="sub">Alignment, padding, packed</h4>
+<script type="text/plain" class="code">
+struct A { char a; int b; char c; };   /* 1 + 3(pad) + 4 + 1 + 3(pad) = 12 byte (ARM 32-bit) */
+struct B { int b; char a; char c; };   /* 4 + 1 + 1 + 2(pad)          = 8 byte  */
+struct __attribute__((packed)) P { char a; int b; };  /* 5 byte, nhưng truy cập b có thể unaligned → chậm hoặc fault */
+</script>
+<p>Quy tắc: mỗi thành viên căn theo kích thước của nó; tổng struct căn theo thành viên lớn nhất. Sắp xếp thành viên từ lớn → nhỏ để giảm padding.</p>
+<h4 class="sub">Endianness</h4>
+<script type="text/plain" class="code">
+int is_little_endian(void) {
+    uint32_t x = 1;
+    return *(uint8_t *)&x == 1;       /* byte thấp nằm ở địa chỉ thấp → little-endian */
+}
+/* Cortex-M (STM32), ESP32 mặc định little-endian. Giao thức mạng (TCP/IP) dùng big-endian. */
+</script>
+<h4 class="sub">Integer promotion & so sánh signed/unsigned</h4>
+<script type="text/plain" class="code">
+uint8_t x = 0xFF;
+if (~x == 0x00) { }        /* SAI: x được nâng lên int, ~x = 0xFFFFFF00 ≠ 0 */
+if ((uint8_t)~x == 0) { }  /* ĐÚNG */
+
+int a = -1; unsigned int b = 1;
+if (a < b) { }             /* FALSE: a bị chuyển thành unsigned = 0xFFFFFFFF */
+</script>
+<h4 class="sub">Cấu trúc dữ liệu hay dùng trong firmware</h4>
+<script type="text/plain" class="code">
+/* Ring buffer 1 producer (ISR) – 1 consumer (main), kích thước lũy thừa 2 */
+#define RB_SIZE 64u
+typedef struct { volatile uint16_t head, tail; uint8_t buf[RB_SIZE]; } rb_t;
+
+static inline int rb_put(rb_t *r, uint8_t d) {          /* gọi trong ISR */
+    uint16_t next = (r->head + 1u) & (RB_SIZE - 1u);
+    if (next == r->tail) return -1;                      /* đầy */
+    r->buf[r->head] = d; r->head = next; return 0;
+}
+static inline int rb_get(rb_t *r, uint8_t *d) {          /* gọi trong main */
+    if (r->tail == r->head) return -1;                   /* rỗng */
+    *d = r->buf[r->tail]; r->tail = (r->tail + 1u) & (RB_SIZE - 1u); return 0;
+}
+
+/* State machine bằng bảng con trỏ hàm */
+typedef enum { ST_IDLE, ST_RUN, ST_ERROR, ST_COUNT } state_t;
+typedef state_t (*state_fn)(void);
+static state_t idle(void), run(void), error(void);
+static const state_fn table[ST_COUNT] = { idle, run, error };
+void fsm_step(void) { static state_t s = ST_IDLE; s = table[s](); }
+</script>
+<h4 class="sub">Bộ nhớ động trong embedded</h4>
+<ul><li>Tránh <code>malloc/free</code> sau khởi tạo: phân mảnh heap, thời gian không xác định (non-deterministic), khó chứng minh an toàn. Thay bằng cấp phát tĩnh hoặc memory pool kích thước cố định.</li>
+<li>Stack overflow: đệ quy sâu, mảng cục bộ lớn. Phát hiện: tô “stack painting” (điền 0xA5…), MPU guard, FreeRTOS <code>uxTaskGetStackHighWaterMark</code>.</li></ul>
+<h4 class="sub">C++ trong embedded</h4>
+<ul>
+<li>Dùng được: class/encapsulation, namespace, reference, <code>constexpr</code>, template (cẩn thận phình code), RAII (ví dụ lock guard cho critical section), <code>enum class</code>.</li>
+<li>Thường tắt/hạn chế: exceptions (<code>-fno-exceptions</code>), RTTI (<code>-fno-rtti</code>), cấp phát động. Hàm <code>virtual</code> tốn 1 con trỏ vtable/object + gọi gián tiếp.</li>
+<li><code>extern "C"</code>: tắt name mangling để link với code C và để tên ISR (vd. <code>USART1_IRQHandler</code>) khớp với bảng vector.</li>
+</ul>
+</div>
+
+<div class="lvl deep"><h3><span class="tag d">Chuyên sâu</span> Từ reset đến <code>main()</code> & chất lượng code</h3>
+<h4 class="sub">Startup trên Cortex-M</h4>
+<ol>
+<li>Sau reset, CPU đọc word 0 của vector table → nạp vào <b>MSP</b>; word 1 → nạp vào <b>PC</b> (địa chỉ <code>Reset_Handler</code>).</li>
+<li><code>Reset_Handler</code>: copy <code>.data</code> từ Flash sang RAM, xóa <code>.bss</code> về 0.</li>
+<li>Gọi <code>SystemInit()</code> (cấu hình clock), <code>__libc_init_array()</code> (constructor C++ toàn cục), rồi <code>main()</code>.</li>
+</ol>
+<p><b>Linker script</b> (<code>.ld</code>) định nghĩa vùng nhớ (<code>FLASH</code>, <code>RAM</code>) và đặt các section vào đâu; file <b>.map</b> cho biết từng biến/hàm nằm ở đâu và tốn bao nhiêu byte.</p>
+<h4 class="sub">Tối ưu & compiler</h4>
+<ul>
+<li><code>-O0</code> (debug), <code>-O2</code> (tốc độ), <code>-Os</code> (kích thước). Bug “chỉ xuất hiện khi bật -O2” thường do thiếu <code>volatile</code> hoặc undefined behavior.</li>
+<li>Memory barrier: <code>__DMB()</code>, <code>__DSB()</code>, <code>__ISB()</code> (CMSIS) — đảm bảo thứ tự truy cập bộ nhớ, ví dụ sau khi đổi VTOR hoặc trước khi ngủ.</li>
+<li>Critical section: <code>__disable_irq()/__enable_irq()</code> hoặc lưu/khôi phục PRIMASK; trên M3/M4 có thể dùng BASEPRI để chỉ chặn ngắt có ưu tiên thấp.</li>
+</ul>
+<h4 class="sub">Coding standard & an toàn</h4>
+<ul>
+<li><b>MISRA C</b> (bắt buộc phổ biến trong automotive): không dùng cấp phát động, hạn chế ép kiểu ngầm, không đệ quy, mọi <code>switch</code> có <code>default</code>, không dùng <code>goto</code>…</li>
+<li>Re-entrancy: hàm reentrant không dùng biến static/global không được bảo vệ → an toàn khi gọi từ ISR và nhiều task.</li>
+<li>Kiểm tra tĩnh (static analysis: cppcheck, PC-lint, Polyspace), unit test trên host (Unity, GoogleTest), đo code coverage.</li>
+</ul>
+</div>
+
+<div class="qa"><h3><span class="tag q">Câu hỏi phỏng vấn</span></h3>
+<details><summary><code>volatile</code> là gì? Một biến có thể vừa <code>const</code> vừa <code>volatile</code> không?</summary><div>Có. <code>volatile</code> buộc compiler thực hiện mọi truy cập thật sự; <code>const</code> cấm chương trình ghi. Ví dụ: thanh ghi trạng thái chỉ đọc của ngoại vi — phần cứng thay đổi nó (volatile) nhưng code không được ghi (const).</div></details>
+<details><summary>Khác nhau giữa macro và inline function?</summary><div>Macro là thay thế văn bản lúc preprocess: không kiểm tra kiểu, có thể đánh giá tham số nhiều lần, khó debug. <code>static inline</code> là hàm thật: kiểm tra kiểu, tham số đánh giá 1 lần, compiler quyết định có chèn (inline) hay không.</div></details>
+<details><summary>Biến <code>static</code> cục bộ nằm ở đâu trong bộ nhớ? Khác biến cục bộ thường ra sao?</summary><div>Ở <code>.data</code> (nếu khởi tạo khác 0) hoặc <code>.bss</code>, tồn tại suốt chương trình, khởi tạo 1 lần. Biến cục bộ thường nằm trên stack, mất khi hàm return.</div></details>
+<details><summary>Vì sao ISR không nhận tham số và không trả về giá trị?</summary><div>ISR được phần cứng gọi bất đồng bộ qua vector table, không có “người gọi” để truyền tham số hay nhận kết quả. Giao tiếp với main qua biến <code>volatile</code> toàn cục, ring buffer, cờ, hoặc cơ chế RTOS (queue/semaphore FromISR).</div></details>
+<details><summary><code>sizeof(struct {char a; int b; char c;})</code> trên ARM 32-bit bằng bao nhiêu? Làm sao giảm?</summary><div>12 byte do padding. Sắp lại thành <code>{int b; char a; char c;}</code> → 8 byte. <code>packed</code> → 6 byte nhưng có thể truy cập không căn hàng (chậm hoặc HardFault với một số lệnh/core như Cortex-M0).</div></details>
+<details><summary>Tại sao tránh <code>malloc</code> trong firmware?</summary><div>Phân mảnh heap theo thời gian, thời gian thực thi không xác định, có thể trả về NULL lúc runtime khó tái hiện, và các chuẩn an toàn (MISRA, ISO 26262) khuyến nghị tránh. Thay bằng cấp phát tĩnh hoặc pool cố định.</div></details>
+<details><summary>Một vòng lặp chờ cờ chạy đúng ở -O0 nhưng treo ở -O2. Vì sao?</summary><div>Cờ được ISR thay đổi nhưng không khai báo <code>volatile</code>: compiler đọc cờ một lần vào thanh ghi rồi lặp vô hạn. Sửa: khai báo <code>volatile</code>.</div></details>
+<details><summary>Viết hàm đảo bit của một byte / kiểm tra lũy thừa của 2.</summary><div><pre><code>uint8_t rev8(uint8_t b){ uint8_t r=0; for(int i=0;i&lt;8;i++){ r=(r&lt;&lt;1)|(b&amp;1); b&gt;&gt;=1; } return r; }
+int is_pow2(uint32_t x){ return x &amp;&amp; !(x &amp; (x-1)); }</code></pre></div></details>
+<details><summary>Stack và heap khác nhau thế nào?</summary><div>Stack: cấp phát tự động theo lời gọi hàm (LIFO), rất nhanh, kích thước cố định do linker script quy định. Heap: cấp phát thủ công, linh hoạt nhưng có overhead, phân mảnh. Trên MCU cả hai cùng chia RAM nhỏ → overflow có thể ghi đè lẫn nhau.</div></details>
+<details><summary><code>extern "C"</code> dùng để làm gì?</summary><div>Tắt C++ name mangling để symbol có tên kiểu C — cần khi gọi thư viện C từ C++ và khi định nghĩa ISR trong file .cpp để linker ghép đúng vào vector table.</div></details>
+</div>
+
+<div class="cv"><h3>🔗 Liên hệ CV</h3>
+<ul><li>Dự án xe điều khiển dùng C trên STM32/ESP32 → chuẩn bị giải thích: cấu trúc firmware (super-loop hay RTOS?), cách xử lý dữ liệu UART nhận từ ESP (ring buffer? parse gói?), cách sinh PWM cho động cơ.</li>
+<li>Ghi “C/C++” → sẵn sàng cho câu hỏi C++ cơ bản: class vs struct, constructor/destructor, virtual, reference vs pointer.</li></ul></div>
+
+<p class="src">Nguồn: <a href="https://en.cppreference.com/w/c/language" target="_blank" rel="noopener">cppreference – C language</a> · <a href="https://www.st.com/resource/en/reference_manual/rm0008-stm32f101xx-stm32f102xx-stm32f103xx-stm32f105xx-and-stm32f107xx-advanced-armbased-32bit-mcus-stmicroelectronics.pdf" target="_blank" rel="noopener">ST RM0008 (STM32F1 reference manual)</a> · <a href="https://barrgroup.com/embedded-systems/books/embedded-c-coding-standard" target="_blank" rel="noopener">Barr Group Embedded C Coding Standard</a> · <a href="https://misra.org.uk/" target="_blank" rel="noopener">MISRA</a> · <a href="https://arm-software.github.io/CMSIS_5/Core/html/index.html" target="_blank" rel="noopener">CMSIS-Core</a></p>
+</section>
+
+<!-- ============ VERILOG ============ -->
+<section class="skill" id="verilog">
+<h2><span class="num">02</span> Verilog HDL <label class="donebox"><input type="checkbox" data-done="verilog"> Đã ôn</label></h2>
+<p class="lead">Verilog <b>mô tả phần cứng</b>, không phải chương trình chạy tuần tự. Câu hỏi kinh điển: blocking vs non-blocking, latch, FSM, testbench, timing.</p>
+
+<div class="lvl basic"><h3><span class="tag b">Cơ bản</span> Cú pháp & tư duy phần cứng</h3>
+<ul>
+<li><b>module</b> + ports (<code>input</code>, <code>output</code>, <code>inout</code>); ghép module bằng instantiation (nên dùng named port <code>.clk(clk)</code>).</li>
+<li><b>wire</b>: dây nối, được gán bằng <code>assign</code> hoặc nối output module. <b>reg</b>: biến được gán trong <code>always</code>/<code>initial</code> — <i>không nhất thiết</i> thành flip-flop (có thể là mạch tổ hợp).</li>
+<li>Số: <code>4'b1010</code>, <code>8'hFF</code>, <code>16'd100</code>; giá trị 4 trạng thái: <code>0, 1, x</code> (không xác định), <code>z</code> (trở kháng cao).</li>
+<li>Toán tử đặc biệt: ghép <code>{a, b}</code>, lặp <code>{4{1'b1}}</code>, rút gọn <code>&amp;a</code>, <code>|a</code>, <code>^a</code> (parity), điều kiện <code>? :</code>.</li>
+<li><code>parameter</code>/<code>localparam</code> để module tham số hóa (vd. độ rộng bus).</li>
+</ul>
+<script type="text/plain" class="code">
+// Mạch tổ hợp: MUX 4-1
+module mux4 #(parameter W = 8) (input [W-1:0] a, b, c, d, input [1:0] sel, output reg [W-1:0] y);
+  always @(*) begin
+    case (sel)
+      2'd0: y = a;  2'd1: y = b;  2'd2: y = c;
+      default: y = d;            // luôn có default → tránh latch
+    endcase
+  end
+endmodule
+
+// Mạch tuần tự: D flip-flop reset bất đồng bộ, tích cực mức thấp
+module dff (input clk, rst_n, d, output reg q);
+  always @(posedge clk or negedge rst_n)
+    if (!rst_n) q <= 1'b0;
+    else        q <= d;
+endmodule
+</script>
+<h4 class="sub">Blocking (<code>=</code>) vs Non-blocking (<code>&lt;=</code>)</h4>
+<div class="tbl"><table>
+<tr><th></th><th>Blocking <code>=</code></th><th>Non-blocking <code>&lt;=</code></th></tr>
+<tr><td>Thực thi</td><td>Tuần tự, câu sau thấy kết quả câu trước</td><td>Vế phải tính hết trước, cập nhật đồng loạt cuối time-step</td></tr>
+<tr><td>Dùng cho</td><td>Mạch tổ hợp <code>always @(*)</code></td><td>Mạch tuần tự <code>always @(posedge clk)</code></td></tr>
+<tr><td>Ví dụ swap <code>a↔b</code></td><td><code>a = b; b = a;</code> → cả hai = b (sai)</td><td><code>a &lt;= b; b &lt;= a;</code> → hoán đổi đúng</td></tr>
+</table></div>
+</div>
+
+<div class="lvl adv"><h3><span class="tag a">Nâng cao</span> FSM, latch, testbench, synthesizable</h3>
+<h4 class="sub">Latch ngoài ý muốn</h4>
+<p>Trong <code>always @(*)</code>, nếu có nhánh mà output không được gán (thiếu <code>else</code>, <code>case</code> thiếu <code>default</code>) → tool suy ra <b>latch</b> để “giữ giá trị cũ”. Sửa: gán giá trị mặc định đầu khối hoặc phủ đủ mọi nhánh.</p>
+<h4 class="sub">FSM — Moore vs Mealy</h4>
+<ul><li><b>Moore</b>: output chỉ phụ thuộc state → ổn định, trễ 1 chu kỳ. <b>Mealy</b>: output phụ thuộc state + input → phản hồi nhanh hơn, ít state hơn nhưng có thể glitch.</li>
+<li>Phong cách 2–3 khối always: (1) thanh ghi state tuần tự, (2) logic next-state tổ hợp, (3) logic output.</li></ul>
+<script type="text/plain" class="code">
+// Phát hiện chuỗi "101" (Moore, cho phép chồng lấn)
+module det101 (input clk, rst_n, x, output y);
+  localparam S0 = 2'd0, S1 = 2'd1, S10 = 2'd2, S101 = 2'd3;
+  reg [1:0] st, nx;
+  always @(posedge clk or negedge rst_n)        // 1) state register
+    if (!rst_n) st <= S0; else st <= nx;
+  always @(*) begin                              // 2) next-state logic
+    nx = st;
+    case (st)
+      S0:   nx = x ? S1   : S0;
+      S1:   nx = x ? S1   : S10;
+      S10:  nx = x ? S101 : S0;
+      S101: nx = x ? S1   : S10;
+    endcase
+  end
+  assign y = (st == S101);                       // 3) output (Moore)
+endmodule
+</script>
+<h4 class="sub">Testbench</h4>
+<script type="text/plain" class="code">
+`timescale 1ns/1ps
+module tb;
+  reg clk = 0, rst_n = 0, x = 0;  wire y;
+  det101 dut (.clk(clk), .rst_n(rst_n), .x(x), .y(y));
+  always #5 clk = ~clk;                         // clock 100 MHz
+  initial begin
+    $dumpfile("wave.vcd"); $dumpvars(0, tb);
+    #12 rst_n = 1;
+    repeat (16) @(negedge clk) x = $random;     // kích thích ngẫu nhiên
+    #20 $finish;
+  end
+  initial $monitor("%0t x=%b y=%b", $time, x, y);
+endmodule
+</script>
+<ul>
+<li><b>Không tổng hợp được</b> (chỉ dùng mô phỏng): <code>#delay</code>, <code>initial</code> (trừ một số FPGA cho phép khởi tạo), <code>$display</code>, <code>$random</code>, vòng lặp không xác định số lần.</li>
+<li><code>generate</code>/<code>for</code> để nhân bản phần cứng; <code>function</code> (tổ hợp, không delay) vs <code>task</code> (có thể có delay, nhiều output).</li>
+<li>Reset đồng bộ (trong sensitivity chỉ có clk) vs bất đồng bộ (<code>or negedge rst_n</code>). Thực tế hay dùng “async assert, sync de-assert”.</li>
+</ul>
+</div>
+
+<div class="lvl deep"><h3><span class="tag d">Chuyên sâu</span> Timing, CDC, tối ưu</h3>
+<ul>
+<li><b>Setup/Hold</b>: dữ liệu phải ổn định trước cạnh clock một khoảng T<sub>setup</sub> và giữ sau cạnh T<sub>hold</sub>. Điều kiện setup: <code>T<sub>clk</sub> ≥ T<sub>clk→q</sub> + T<sub>logic</sub> + T<sub>setup</sub></code> (bỏ qua skew) → f<sub>max</sub> = 1/T<sub>clk,min</sub>.</li>
+<li><b>Critical path</b> quá dài → <b>pipelining</b> (chèn thanh ghi), tăng throughput đổi lấy latency.</li>
+<li><b>Clock Domain Crossing</b>: tín hiệu 1 bit qua miền clock khác → bộ đồng bộ 2 flip-flop để giảm xác suất metastability; bus nhiều bit → async FIFO (con trỏ mã Gray) hoặc handshake.</li>
+<li>Edge detect: <code>rise = sig &amp; ~sig_d;</code> với <code>sig_d</code> là bản trễ 1 chu kỳ. Debounce nút nhấn bằng counter.</li>
+<li>Chia clock: không dùng output counter làm clock trực tiếp (gây skew, khó phân tích timing) — dùng <b>clock enable</b> hoặc PLL.</li>
+<li>Viết code thân thiện tổng hợp: tránh nhân/chia lớn tổ hợp (dùng DSP/IP), mảng lớn → suy ra Block RAM khi viết đúng mẫu.</li>
+</ul>
+</div>
+
+<div class="qa"><h3><span class="tag q">Câu hỏi phỏng vấn</span></h3>
+<details><summary>wire và reg khác nhau thế nào? reg có phải luôn là flip-flop?</summary><div>wire biểu diễn kết nối, không lưu trữ, gán bằng <code>assign</code>. reg là biến gán trong khối thủ tục. reg trong <code>always @(*)</code> đầy đủ nhánh → mạch tổ hợp; trong <code>always @(posedge clk)</code> → flip-flop. (SystemVerilog gộp thành <code>logic</code>.)</div></details>
+<details><summary>Điều gì sinh ra latch? Latch có hại gì?</summary><div>Output tổ hợp không được gán trong mọi nhánh. Latch nhạy mức (level-sensitive), khó phân tích timing, dễ glitch, thường là bug ngoài ý muốn trong thiết kế đồng bộ.</div></details>
+<details><summary>Viết bộ đếm 4-bit có enable và reset đồng bộ.</summary><div><pre><code>always @(posedge clk) if (rst) cnt &lt;= 4'd0; else if (en) cnt &lt;= cnt + 4'd1;</code></pre></div></details>
+<details><summary>Metastability là gì, xử lý thế nào?</summary><div>Khi vi phạm setup/hold, flip-flop có thể rơi vào trạng thái trung gian một thời gian không xác định. Không loại bỏ hoàn toàn được; dùng chuỗi 2–3 FF đồng bộ để giảm xác suất (tăng MTBF), không dùng tín hiệu chưa đồng bộ trong logic.</div></details>
+<details><summary>Simulation chạy đúng nhưng nạp FPGA sai — nguyên nhân thường gặp?</summary><div>Code không tổng hợp được giống mô phỏng (dùng delay, initial), thiếu sensitivity list (dùng <code>@(a)</code> thay <code>@(*)</code>), latch, vi phạm timing (chưa có constraint clock), sai gán chân, tín hiệu bất đồng bộ (nút nhấn) chưa đồng bộ/debounce, reset sai cực tính.</div></details>
+</div>
+
+<div class="cv"><h3>🔗 Liên hệ CV — Simple CPU 16-bit</h3>
+<p>Chuẩn bị nói được: các module (ALU, Register File, Control Unit), phần nào tổ hợp/tuần tự, Control Unit là FSM hay decoder tổ hợp, testbench kiểm tra lệnh thế nào (so sánh với giá trị mong đợi? xem waveform ModelSim?), tần số đạt được trên FPGA.</p></div>
+
+<p class="src">Nguồn: IEEE Std 1364-2005 (Verilog) · <a href="https://hdlbits.01xz.net/" target="_blank" rel="noopener">HDLBits (luyện tập)</a> · Clifford Cummings, “Nonblocking Assignments in Verilog Synthesis, Coding Styles That Kill!” (SNUG 2000) · <a href="http://www.sunburst-design.com/papers/" target="_blank" rel="noopener">Sunburst Design papers</a></p>
+</section>
+
+<!-- ============ ASSEMBLY ============ -->
+<section class="skill" id="asm">
+<h2><span class="num">03</span> Assembly <label class="donebox"><input type="checkbox" data-done="asm"> Đã ôn</label></h2>
+<p class="lead">Không cần viết cả chương trình bằng Assembly, nhưng phải đọc được disassembly, hiểu thanh ghi, stack, quy ước gọi hàm và điều gì xảy ra khi vào ngắt. Ví dụ dưới đây dùng ARM Cortex-M (Thumb-2) vì STM32 dùng core này.</p>
+
+<div class="lvl basic"><h3><span class="tag b">Cơ bản</span> ISA, thanh ghi, lệnh</h3>
+<ul>
+<li><b>ISA</b> (Instruction Set Architecture): hợp đồng giữa phần mềm và phần cứng — tập lệnh, thanh ghi, chế độ địa chỉ, định dạng lệnh.</li>
+<li><b>RISC vs CISC</b>: RISC (ARM, RISC-V) lệnh đơn giản, độ dài cố định/ít loại, kiến trúc load/store; CISC (x86) lệnh phức tạp, truy cập bộ nhớ trực tiếp trong lệnh tính toán.</li>
+<li><b>Load/Store</b>: chỉ <code>LDR/STR</code> truy cập bộ nhớ; phép tính chỉ làm trên thanh ghi.</li>
+</ul>
+<div class="tbl"><table>
+<tr><th>Thanh ghi Cortex-M</th><th>Vai trò</th></tr>
+<tr><td>R0–R3</td><td>Tham số hàm / giá trị trả về (R0), scratch</td></tr>
+<tr><td>R4–R11</td><td>Callee-saved (hàm bị gọi phải bảo toàn)</td></tr>
+<tr><td>R12 (IP)</td><td>Scratch</td></tr>
+<tr><td>R13 (SP)</td><td>Stack pointer — MSP (main) hoặc PSP (process, dùng cho task RTOS)</td></tr>
+<tr><td>R14 (LR)</td><td>Link register — địa chỉ trả về sau <code>BL</code></td></tr>
+<tr><td>R15 (PC)</td><td>Program counter</td></tr>
+<tr><td>xPSR</td><td>Cờ N (âm), Z (zero), C (carry), V (overflow) + số exception đang chạy</td></tr>
+</table></div>
+<div class="tbl"><table>
+<tr><th>Nhóm</th><th>Lệnh ví dụ</th></tr>
+<tr><td>Data processing</td><td><code>MOV, ADD, SUB, MUL, AND, ORR, EOR, LSL, LSR, CMP</code> (hậu tố <code>S</code> → cập nhật cờ)</td></tr>
+<tr><td>Memory</td><td><code>LDR, STR, LDRB, STRH, PUSH, POP, LDM, STM</code></td></tr>
+<tr><td>Branch</td><td><code>B, BL</code> (gọi hàm, lưu LR), <code>BX LR</code> (return), <code>BEQ/BNE/BGT…</code> (theo cờ)</td></tr>
+</table></div>
+</div>
+
+<div class="lvl adv"><h3><span class="tag a">Nâng cao</span> Đọc/viết một hàm & quy ước gọi hàm (AAPCS)</h3>
+<script type="text/plain" class="code">
+@ int sum(int *p, int n)  → p ở R0, n ở R1, kết quả trả về R0
+sum:
+        MOVS    R2, #0          @ acc = 0
+loop:   CMP     R1, #0
+        BEQ     done            @ n == 0 → kết thúc
+        LDR     R3, [R0], #4    @ R3 = *p; p += 4 (post-index)
+        ADDS    R2, R2, R3
+        SUBS    R1, R1, #1
+        B       loop
+done:   MOV     R0, R2
+        BX      LR              @ quay về địa chỉ trong LR
+</script>
+<ul>
+<li>Hàm gọi hàm khác phải <code>PUSH {R4-R7, LR}</code> đầu hàm và <code>POP {R4-R7, PC}</code> cuối hàm (vì <code>BL</code> ghi đè LR).</li>
+<li>Stack Cortex-M là <b>full-descending</b> (SP trỏ phần tử cuối, tăng xuống), nên căn 8 byte ở ranh giới hàm public.</li>
+<li>Chế độ địa chỉ: tức thời <code>#imm</code>, thanh ghi, offset <code>[R0, #4]</code>, pre-index <code>[R0, #4]!</code>, post-index <code>[R0], #4</code>.</li>
+<li>Inline asm (GCC): <code>__asm volatile ("nop");</code> — CMSIS cung cấp sẵn <code>__NOP(), __WFI(), __DSB()…</code></li>
+</ul>
+</div>
+
+<div class="lvl deep"><h3><span class="tag d">Chuyên sâu</span> Exception entry, pipeline, RTOS</h3>
+<ul>
+<li><b>Khi vào ngắt</b>, phần cứng tự đẩy 8 word lên stack: <code>R0, R1, R2, R3, R12, LR, PC, xPSR</code> (thêm thanh ghi FPU nếu dùng FPU trên M4F), rồi nạp LR = giá trị <b>EXC_RETURN</b> (vd. <code>0xFFFFFFF9</code>: về Thread mode dùng MSP; <code>0xFFFFFFFD</code>: về Thread mode dùng PSP). Nhờ vậy ISR viết bằng C bình thường được.</li>
+<li><b>Debug HardFault</b>: đọc khung stack để lấy PC tại thời điểm lỗi, kết hợp thanh ghi CFSR/HFSR/BFAR/MMFAR để biết nguyên nhân (truy cập địa chỉ sai, chia 0, unaligned, lệnh không hợp lệ).</li>
+<li><b>Pipeline</b>: Cortex-M3/M4 pipeline 3 tầng (Fetch–Decode–Execute); nhảy nhánh làm xả pipeline → tốn chu kỳ.</li>
+<li><b>Context switch RTOS</b> (FreeRTOS trên Cortex-M): dùng ngắt PendSV ưu tiên thấp nhất; phần mềm tự lưu R4–R11 của task cũ vào stack task (PSP), đổi PSP sang task mới, khôi phục R4–R11.</li>
+<li>Đọc disassembly: <code>arm-none-eabi-objdump -d firmware.elf</code> — dùng để kiểm tra compiler có giữ truy cập volatile, hàm có được inline không.</li>
+</ul>
+</div>
+
+<div class="qa"><h3><span class="tag q">Câu hỏi phỏng vấn</span></h3>
+<details><summary>Khi nào cần dùng Assembly trong dự án thực tế?</summary><div>Startup code (vector table, Reset_Handler), context switch RTOS, lệnh đặc biệt không có trong C (WFI, barrier, truy cập thanh ghi đặc biệt), tối ưu vòng lặp cực kỳ quan trọng (DSP), và đọc disassembly khi debug.</div></details>
+<details><summary>LR dùng để làm gì? Chuyện gì xảy ra với LR khi hàm lồng hàm?</summary><div>LR giữ địa chỉ trả về sau <code>BL</code>. Nếu hàm A gọi B, A phải lưu LR (PUSH) trước khi <code>BL B</code>, nếu không sẽ mất đường về.</div></details>
+<details><summary>Cờ C và V khác nhau thế nào?</summary><div>C (carry) báo tràn khi coi toán hạng là <b>unsigned</b>; V (overflow) báo tràn khi coi là <b>signed</b> (bù 2). Ví dụ 0x7FFFFFFF + 1: C=0, V=1.</div></details>
+<details><summary>Von Neumann vs Harvard?</summary><div>Von Neumann: một bus/bộ nhớ chung cho lệnh và dữ liệu → nghẽn cổ chai. Harvard: bus riêng → đọc lệnh và dữ liệu song song. Cortex-M3/M4 dùng bus kiểu Harvard (I-Code, D-Code, System bus) nhưng không gian địa chỉ thống nhất.</div></details>
+</div>
+
+<div class="cv"><h3>🔗 Liên hệ CV</h3><p>Trong CPU 16-bit, bạn đã tự định nghĩa tập lệnh → người phỏng vấn có thể hỏi: “Viết chương trình assembly cho CPU của bạn để cộng 2 số trong bộ nhớ”, “định dạng lệnh bao nhiêu bit cho opcode, thanh ghi, immediate?”. Hãy chuẩn bị bảng opcode thật của bạn.</p></div>
+
+<p class="src">Nguồn: <a href="https://developer.arm.com/documentation/dui0552/a/" target="_blank" rel="noopener">ARM Cortex-M3 Devices Generic User Guide (DUI0552)</a> · <a href="https://github.com/ARM-software/abi-aa/blob/main/aapcs32/aapcs32.rst" target="_blank" rel="noopener">AAPCS32</a> · Joseph Yiu, <i>The Definitive Guide to ARM Cortex-M3 and Cortex-M4 Processors</i></p>
+</section>
+
+<div class="group-title">2 · Thiết kế số</div>
+
+<!-- ============ LOGIC ============ -->
+<section class="skill" id="logic">
+<h2><span class="num">04</span> Logical Circuit (Digital Logic) <label class="donebox"><input type="checkbox" data-done="logic"> Đã ôn</label></h2>
+<p class="lead">Nền móng cho Verilog, FPGA và CPU design. Hay bị hỏi: bù 2, cổng vạn năng, mạch cộng, flip-flop, bộ đếm, setup/hold.</p>
+
+<div class="lvl basic"><h3><span class="tag b">Cơ bản</span> Hệ số, đại số Boole, mạch tổ hợp</h3>
+<ul>
+<li>Hệ nhị phân/thập lục phân; <b>bù 2</b> n-bit biểu diễn −2<sup>n−1</sup> … 2<sup>n−1</sup>−1; đổi dấu: đảo bit + 1. Mã Gray: hai giá trị liên tiếp chỉ khác 1 bit.</li>
+<li>Cổng: AND, OR, NOT, NAND, NOR, XOR, XNOR. <b>NAND và NOR là cổng vạn năng</b> (dựng được mọi hàm).</li>
+<li>De Morgan: <code>¬(A·B) = ¬A + ¬B</code>, <code>¬(A+B) = ¬A·¬B</code>. Rút gọn bằng biến đổi Boole hoặc <b>bìa Karnaugh</b> (K-map), dạng SOP/POS.</li>
+<li>Mạch tổ hợp: MUX, DEMUX, encoder (priority encoder), decoder, comparator.</li>
+<li><b>Full adder</b>: <code>S = A ⊕ B ⊕ Cin</code>, <code>Cout = A·B + Cin·(A ⊕ B)</code>. Ghép nối tiếp → <b>ripple-carry adder</b> (chậm vì carry lan truyền qua n tầng).</li>
+<li>Phép trừ <code>A − B = A + ¬B + 1</code> → cùng một bộ cộng làm được cả cộng/trừ.</li>
+</ul>
+</div>
+
+<div class="lvl adv"><h3><span class="tag a">Nâng cao</span> Mạch tuần tự & timing</h3>
+<div class="tbl"><table>
+<tr><th>Phần tử</th><th>Đặc điểm</th></tr>
+<tr><td>SR latch (NOR)</td><td>S=R=1 là trạng thái cấm.</td></tr>
+<tr><td>D latch</td><td>Nhạy mức: khi EN=1, Q “trong suốt” theo D.</td></tr>
+<tr><td>D flip-flop</td><td>Nhạy cạnh: chỉ lấy mẫu D tại cạnh clock. Phần tử cơ bản của thiết kế đồng bộ.</td></tr>
+<tr><td>JK / T flip-flop</td><td>JK: J=K=1 → đảo trạng thái. T: T=1 → đảo (dùng làm bộ chia 2, bộ đếm).</td></tr>
+</table></div>
+<ul>
+<li>Thanh ghi, thanh ghi dịch (SIPO/PISO — nền tảng của UART/SPI), bộ đếm <b>bất đồng bộ</b> (ripple, FF sau lấy clock từ FF trước → trễ cộng dồn, glitch) vs <b>đồng bộ</b> (chung clock).</li>
+<li>Timing: propagation delay, T<sub>setup</sub>, T<sub>hold</sub>, T<sub>clk→q</sub>; f<sub>max</sub> = 1 / (T<sub>clk→q</sub> + T<sub>logic,max</sub> + T<sub>setup</sub>).</li>
+<li>Hazard/glitch: xung nhiễu ngắn do các đường có độ trễ khác nhau; loại bỏ static hazard bằng thêm số hạng dư (consensus term) hoặc chỉ lấy mẫu bằng flip-flop.</li>
+</ul>
+</div>
+
+<div class="lvl deep"><h3><span class="tag d">Chuyên sâu</span> Tối ưu tốc độ, công suất</h3>
+<ul>
+<li><b>Carry Look-Ahead</b>: G<sub>i</sub> = A<sub>i</sub>B<sub>i</sub>, P<sub>i</sub> = A<sub>i</sub>⊕B<sub>i</sub>, C<sub>i+1</sub> = G<sub>i</sub> + P<sub>i</sub>C<sub>i</sub> → tính carry song song, độ trễ ~ O(log n) thay vì O(n).</li>
+<li>Bộ nhân: shift-and-add tuần tự (ít tài nguyên, nhiều chu kỳ) vs mảng nhân tổ hợp (nhanh, tốn diện tích).</li>
+<li>CMOS: cổng NAND/NOR là cấu trúc tự nhiên. Công suất động <code>P ≈ α·C·V²·f</code> → giảm điện áp hiệu quả nhất; clock gating giảm α.</li>
+<li>Metastability & bộ đồng bộ 2-FF (xem Verilog).</li>
+</ul>
+</div>
+
+<div class="qa"><h3><span class="tag q">Câu hỏi phỏng vấn</span></h3>
+<details><summary>Biểu diễn −5 trong bù 2 8-bit?</summary><div>5 = 0000 0101 → đảo = 1111 1010 → +1 = <b>1111 1011</b> (0xFB).</div></details>
+<details><summary>Dựng cổng NOT, AND, OR chỉ bằng NAND.</summary><div>NOT A = NAND(A, A). AND = NOT(NAND(A,B)). OR = NAND(NOT A, NOT B) (De Morgan).</div></details>
+<details><summary>Latch và flip-flop khác nhau thế nào?</summary><div>Latch nhạy mức (trong suốt khi enable), flip-flop nhạy cạnh (chỉ cập nhật tại cạnh clock). Thiết kế đồng bộ dùng flip-flop để timing dự đoán được.</div></details>
+<details><summary>Thiết kế bộ chia tần số 2 bằng 1 flip-flop.</summary><div>D flip-flop với D = ¬Q (hoặc T flip-flop với T=1): Q đảo mỗi cạnh lên → tần số Q bằng f<sub>clk</sub>/2, duty 50%.</div></details>
+<details><summary>Vi phạm hold time có sửa bằng cách giảm tần số clock được không?</summary><div>Không. Hold phụ thuộc đường ngắn nhất và skew, không phụ thuộc chu kỳ clock. Sửa bằng cách thêm độ trễ trên đường dữ liệu. Vi phạm setup thì giảm tần số được.</div></details>
+</div>
+<p class="src">Nguồn: M. Morris Mano, <i>Digital Design</i> · Harris &amp; Harris, <i>Digital Design and Computer Architecture</i> · <a href="https://www.nand2tetris.org/" target="_blank" rel="noopener">Nand2Tetris</a></p>
+</section>
+
+<!-- ============ CPU ============ -->
+<section class="skill" id="cpu">
+<h2><span class="num">05</span> CPU Design <label class="donebox"><input type="checkbox" data-done="cpu"> Đã ôn</label></h2>
+<p class="lead">Gắn trực tiếp với dự án <b>Simple CPU 16-bit</b> — gần như chắc chắn bị hỏi sâu. Hãy nắm datapath, định dạng lệnh, control unit, và pipeline.</p>
+
+<div class="lvl basic"><h3><span class="tag b">Cơ bản</span> Thành phần & chu trình lệnh</h3>
+<div class="flow"><span>Fetch: IR ← Mem[PC], PC ← PC+1</span><i>→</i><span>Decode: Control Unit giải mã opcode, đọc Register File</span><i>→</i><span>Execute: ALU tính / tính địa chỉ</span><i>→</i><span>Memory: Load/Store</span><i>→</i><span>Write-back: ghi kết quả vào thanh ghi</span></div>
+<ul>
+<li><b>PC</b> (địa chỉ lệnh kế), <b>IR</b> (lệnh hiện tại), <b>Register File</b> (thường 2 cổng đọc, 1 cổng ghi), <b>ALU</b> (cộng, trừ, AND, OR, XOR, shift, so sánh → cờ Z/N/C/V), <b>Control Unit</b> (sinh tín hiệu điều khiển: RegWrite, MemRead, MemWrite, ALUOp, ALUSrc, MemToReg, Branch…), bộ nhớ lệnh/dữ liệu.</li>
+<li>Ví dụ định dạng lệnh 16-bit (minh họa, <i>không phải</i> thiết kế của bạn):</li>
+</ul>
+<div class="frame"><span class="k1"><b>opcode</b>[15:12]</span><span class="k2"><b>rd</b>[11:9]</span><span class="k3"><b>rs</b>[8:6]</span><span class="k4"><b>rt</b>[5:3]</span><span><b>funct</b>[2:0]</span></div>
+<div class="frame"><span class="k1"><b>opcode</b>[15:12]</span><span class="k2"><b>rd</b>[11:9]</span><span class="k3"><b>rs</b>[8:6]</span><span class="k4"><b>imm6</b>[5:0] (sign-extend)</span></div>
+<p>R-type: <code>ADD rd, rs, rt</code>. I-type: <code>LOAD rd, imm(rs)</code> → địa chỉ = rs + sign_extend(imm). 4 bit opcode → tối đa 16 lệnh; 3 bit thanh ghi → 8 thanh ghi.</p>
+</div>
+
+<div class="lvl adv"><h3><span class="tag a">Nâng cao</span> Single-cycle, multi-cycle, pipeline</h3>
+<div class="tbl"><table>
+<tr><th>Kiểu</th><th>Ưu</th><th>Nhược</th></tr>
+<tr><td>Single-cycle</td><td>Đơn giản, CPI = 1</td><td>Chu kỳ clock bị kéo dài bởi lệnh chậm nhất (thường là Load)</td></tr>
+<tr><td>Multi-cycle</td><td>Clock ngắn hơn, tái sử dụng ALU/bộ nhớ; Control Unit là FSM</td><td>CPI &gt; 1, thay đổi theo lệnh</td></tr>
+<tr><td>Pipeline 5 tầng (IF-ID-EX-MEM-WB)</td><td>Throughput lý tưởng ~1 lệnh/chu kỳ với clock ngắn</td><td>Phải xử lý hazard</td></tr>
+</table></div>
+<h4 class="sub">Hazard trong pipeline</h4>
+<ul>
+<li><b>Structural</b>: hai lệnh cần cùng tài nguyên (vd. một bộ nhớ chung) → tách bộ nhớ lệnh/dữ liệu.</li>
+<li><b>Data (RAW)</b>: lệnh sau cần kết quả lệnh trước chưa ghi → <b>forwarding/bypass</b>; riêng <i>load-use</i> vẫn phải <b>stall</b> 1 chu kỳ (pipeline 5 tầng kinh điển).</li>
+<li><b>Control</b>: lệnh nhảy chưa biết đích → stall, flush, dự đoán nhánh (static/dynamic, BTB).</li>
+</ul>
+<pre><code>Chu kỳ:   1   2   3   4   5   6
+ADD r1    IF  ID  EX  MEM WB
+SUB r2,r1     IF  ID  EX  MEM WB   ← r1 được forward từ EX/MEM sang EX
+</code></pre>
+</div>
+
+<div class="lvl deep"><h3><span class="tag d">Chuyên sâu</span> Hiệu năng & bộ nhớ</h3>
+<ul>
+<li><b>CPU time = IC × CPI × T<sub>clk</sub></b> (số lệnh × chu kỳ/lệnh × chu kỳ clock).</li>
+<li><b>Amdahl</b>: Speedup = 1 / ((1 − p) + p/s) — tăng tốc phần p lên s lần.</li>
+<li><b>Cache</b>: dựa trên locality (thời gian & không gian). Direct-mapped / set-associative / fully-associative; write-through vs write-back; miss: compulsory, capacity, conflict. Cortex-M3/M4 thường không có cache dữ liệu (STM32F4 có ART accelerator cho Flash); Cortex-M7 có I/D-cache → phải chú ý coherency với DMA.</li>
+<li>Ngắt ở mức CPU: lưu PC/cờ, nhảy vector, trả về — so sánh với cơ chế của Cortex-M.</li>
+<li>Mở rộng: RISC-V (ISA mở, dễ tự hiện thực), superscalar, out-of-order (khái niệm).</li>
+</ul>
+</div>
+
+<div class="qa"><h3><span class="tag q">Câu hỏi phỏng vấn</span></h3>
+<details><summary>Giới thiệu CPU 16-bit của bạn trong 1 phút.</summary><div>Khung trả lời: (1) Mục tiêu & phạm vi, (2) Kiến trúc: số thanh ghi, độ rộng bus, Harvard hay Von Neumann, single/multi-cycle, (3) Định dạng lệnh và nhóm lệnh (Load/Store, Arithmetic…), (4) Control Unit thiết kế thế nào, (5) Kiểm chứng: testbench ModelSim + chạy trên FPGA, (6) Khó khăn & cách giải quyết, (7) Nếu làm lại sẽ cải tiến gì (pipeline, thêm branch, ngắt). <i>Điền số liệu thật từ thiết kế của bạn.</i></div></details>
+<details><summary>Làm sao hiện thực lệnh LOAD trong datapath?</summary><div>ALU tính địa chỉ = rs + sign_extend(imm) (ALUSrc chọn immediate) → MemRead=1 đọc bộ nhớ dữ liệu → MemToReg chọn dữ liệu từ bộ nhớ → RegWrite=1 ghi vào rd.</div></details>
+<details><summary>Thêm lệnh nhảy có điều kiện (BEQ) cần thay đổi gì?</summary><div>ALU so sánh (trừ, xét cờ Z), bộ cộng tính PC + offset, MUX chọn PC kế tiếp theo tín hiệu Branch AND Zero, thêm opcode và tín hiệu trong Control Unit.</div></details>
+<details><summary>Tại sao load-use hazard vẫn cần stall dù có forwarding?</summary><div>Dữ liệu load chỉ có sau tầng MEM, trong khi lệnh kế cần nó ở đầu tầng EX cùng chu kỳ đó → không thể forward ngược thời gian, phải chèn 1 bubble.</div></details>
+<details><summary>Bạn kiểm chứng CPU thế nào? Làm sao biết nó đúng?</summary><div>Gợi ý: testbench cho từng module (ALU với các trường hợp biên: tràn, số âm), testbench tích hợp chạy chương trình mẫu và so sánh nội dung thanh ghi/bộ nhớ với kết quả mong đợi (self-checking), xem waveform, sau đó chạy trên FPGA hiển thị kết quả qua LED/7-segment.</div></details>
+</div>
+<div class="cv"><h3>🔗 Liên hệ CV</h3><p>CV ghi “Designed and simulated… validated through ModelSim and FPGA board”. Chuẩn bị sẵn: sơ đồ khối tự vẽ được trên giấy trong 2 phút, bảng opcode, một lệnh đi qua datapath ra sao, và một bug bạn từng gặp.</p></div>
+<p class="src">Nguồn: Patterson &amp; Hennessy, <i>Computer Organization and Design</i> (RISC-V / MIPS edition) · Harris &amp; Harris, <i>Digital Design and Computer Architecture</i> · <a href="https://riscv.org/" target="_blank" rel="noopener">RISC-V International (mục Specifications)</a></p>
+</section>
+
+<div class="group-title">3 · Nền tảng phần cứng & công cụ</div>
+
+<!-- ============ STM32 ============ -->
+<section class="skill" id="stm32">
+<h2><span class="num">06</span> STM32 <label class="donebox"><input type="checkbox" data-done="stm32"> Đã ôn</label></h2>
+<p class="lead">Họ MCU 32-bit của STMicroelectronics dùng lõi ARM Cortex-M. Ví dụ dưới đây theo <b>STM32F103</b> (Cortex-M3, phổ biến trên board “Blue Pill”); họ khác (F4, G4, L4…) có thanh ghi GPIO khác nhưng khái niệm giống.</p>
+
+<div class="lvl basic"><h3><span class="tag b">Cơ bản</span> Kiến trúc, memory map, clock, GPIO</h3>
+<ul>
+<li>Họ: F0/G0 (M0/M0+), F1 (M3), F4/G4/L4 (M4F), F7/H7 (M7), L/U (low-power), WB/WL (không dây).</li>
+<li><b>Memory map</b> (F1): Flash <code>0x0800 0000</code>, SRAM <code>0x2000 0000</code>, ngoại vi <code>0x4000 0000</code>, System memory (bootloader ROM) <code>0x1FFF F000</code>, ngoại vi lõi Cortex (NVIC, SysTick) <code>0xE000 0000</code>.</li>
+<li><b>Clock tree</b> (F1): HSI 8 MHz (RC nội), HSE (thạch anh ngoài, thường 8 MHz) → PLL ×9 → SYSCLK 72 MHz; AHB 72 MHz, APB2 tối đa 72 MHz, APB1 tối đa 36 MHz; LSI ~40 kHz (IWDG), LSE 32.768 kHz (RTC).</li>
+<li><b>Quy tắc số 1</b>: bật clock ngoại vi trong RCC trước khi dùng (<code>RCC-&gt;APB2ENR</code>, <code>__HAL_RCC_GPIOA_CLK_ENABLE()</code>). Quên bước này → ghi thanh ghi không có tác dụng.</li>
+<li><b>GPIO</b>: input (floating / pull-up / pull-down / analog), output <b>push-pull</b> (chủ động kéo lên và xuống) hoặc <b>open-drain</b> (chỉ kéo xuống, cần điện trở kéo lên — dùng cho I2C, bus wired-AND), alternate function (UART, SPI, PWM…), tốc độ đầu ra.</li>
+<li><b>3 cách lập trình</b>: Register/CMSIS (nhanh, hiểu sâu, khó port), <b>LL</b> (mỏng, gần thanh ghi), <b>HAL</b> (dễ, portable, code lớn và chậm hơn). Công cụ: STM32CubeMX/CubeIDE, Keil, nạp/debug qua ST-Link (SWD).</li>
+</ul>
+<script type="text/plain" class="code">
+/* Nháy LED PC13 – mức thanh ghi (STM32F103, theo RM0008) */
+#include "stm32f1xx.h"
+int main(void) {
+    RCC->APB2ENR |= RCC_APB2ENR_IOPCEN;        /* bật clock GPIOC */
+    GPIOC->CRH &= ~(0xFUL << 20);              /* xóa MODE13/CNF13 (bit 23:20) */
+    GPIOC->CRH |=  (0x2UL << 20);              /* MODE=10: output 2 MHz, CNF=00: push-pull */
+    while (1) {
+        GPIOC->ODR ^= (1UL << 13);
+        for (volatile uint32_t i = 0; i < 500000; i++) { }
+    }
+}
+/* Cùng việc đó với HAL */
+HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);  HAL_Delay(500);
+</script>
+</div>
+
+<div class="lvl adv"><h3><span class="tag a">Nâng cao</span> Timer, ngắt, ADC, DMA, ngoại vi truyền thông</h3>
+<h4 class="sub">Timer</h4>
+<p><code>f<sub>update</sub> = f<sub>TIM</sub> / ((PSC + 1) × (ARR + 1))</code>. Ví dụ f<sub>TIM</sub> = 72 MHz, PSC = 71 → 1 MHz; ARR = 999 → ngắt 1 kHz (1 ms).</p>
+<div class="note">Bẫy hay hỏi: trên F1, nếu prescaler APB1 ≠ 1 thì clock timer APB1 = <b>2 × PCLK1</b> (nên TIM2–TIM4 vẫn chạy 72 MHz dù APB1 = 36 MHz).</div>
+<p>Chế độ: time base (ngắt định kỳ), <b>PWM</b> (CCR quyết định duty), <b>input capture</b> (đo tần số/độ rộng xung, encoder), output compare, one-pulse. TIM1 (advanced) có ngõ ra bù + dead-time cho điều khiển động cơ.</p>
+<h4 class="sub">NVIC & EXTI</h4>
+<ul><li>F1 dùng 4 bit ưu tiên (16 mức), chia preemption/sub-priority theo priority grouping. Số càng nhỏ, ưu tiên càng cao.</li>
+<li>EXTI line 0–15 tương ứng số chân; mỗi line chỉ gắn với <b>một</b> port tại một thời điểm (PA0 hoặc PB0 cho EXTI0). EXTI5–9 và EXTI10–15 dùng chung vector.</li></ul>
+<h4 class="sub">ADC & DMA</h4>
+<ul><li>ADC F1: 12-bit (0–4095), SAR, clock ADC tối đa 14 MHz (~1 Msps), chế độ single/continuous/scan, trigger từ timer. Kết quả: <code>V = raw × Vref / 4095</code>.</li>
+<li><b>DMA</b> chuyển dữ liệu peripheral↔memory không cần CPU: ADC scan nhiều kênh, UART nhận chuỗi dài. UART + DMA + <b>IDLE line interrupt</b> là cách chuẩn để nhận gói có độ dài thay đổi.</li></ul>
+<h4 class="sub">Khác</h4>
+<ul>
+<li>Watchdog: <b>IWDG</b> (clock LSI độc lập, reset nếu không “kick” kịp) và <b>WWDG</b> (phải kick trong một cửa sổ thời gian).</li>
+<li>Low-power F1: Sleep (CPU dừng, ngoại vi chạy), Stop (dừng clock, giữ RAM), Standby (tắt gần hết, mất RAM, thức bằng WKUP/RTC/reset).</li>
+<li>Boot (F1): BOOT0=0 → chạy Flash; BOOT0=1, BOOT1=0 → System memory (bootloader ROM, nạp qua UART); BOOT0=1, BOOT1=1 → SRAM.</li>
+<li>HAL callback: <code>HAL_UART_RxCpltCallback</code>, <code>HAL_TIM_PeriodElapsedCallback</code>, <code>HAL_GPIO_EXTI_Callback</code> — được gọi <i>trong ngữ cảnh ngắt</i>.</li>
+</ul>
+<script type="text/plain" class="code">
+/* Nhận UART từng byte bằng ngắt (HAL) */
+uint8_t rx;
+void start(void) { HAL_UART_Receive_IT(&huart1, &rx, 1); }
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *h) {
+    if (h->Instance == USART1) {
+        rb_put(&uart_rb, rx);                 /* đẩy vào ring buffer, xử lý ở main */
+        HAL_UART_Receive_IT(&huart1, &rx, 1); /* kích hoạt lại */
+    }
+}
+</script>
+</div>
+
+<div class="lvl deep"><h3><span class="tag d">Chuyên sâu</span> Startup, bootloader, RTOS, debug</h3>
+<ul>
+<li><b>Startup file</b> (<code>startup_stm32f103xb.s</code>): vector table + <code>Reset_Handler</code>; handler mặc định là <i>weak</i> → định nghĩa hàm cùng tên để ghi đè.</li>
+<li><b>Bootloader tự viết / IAP</b>: chia Flash thành vùng bootloader + application; bootloader kiểm tra CRC/chữ ký → set MSP từ vector table của app, đặt <b>VTOR</b> (SCB-&gt;VTOR) và nhảy tới Reset_Handler của app. Liên quan trực tiếp đến “flashing ECU”.</li>
+<li><b>FreeRTOS trên STM32</b>: SysTick tạo tick, PendSV làm context switch, SVC khởi động task đầu tiên. Khi dùng HAL + FreeRTOS nên chuyển timebase HAL sang một timer khác SysTick. Ngắt gọi API FreeRTOS phải có ưu tiên số ≥ <code>configMAX_SYSCALL_INTERRUPT_PRIORITY</code> và dùng hàm <code>…FromISR</code>.</li>
+<li><b>Debug</b>: SWD + breakpoint/watchpoint, đọc thanh ghi ngoại vi (SFR view), SWO/ITM printf, phân tích HardFault (CFSR, stacked PC), logic analyzer cho tín hiệu.</li>
+<li>Option bytes: read-out protection (RDP), write protection; <b>errata sheet</b> — luôn kiểm tra khi ngoại vi hành xử lạ (ví dụ I2C trên F1 có nhiều ghi chú trong errata).</li>
+</ul>
+</div>
+
+<div class="qa"><h3><span class="tag q">Câu hỏi phỏng vấn</span></h3>
+<details><summary>HAL, LL và lập trình thanh ghi — bạn chọn cái nào, vì sao?</summary><div>HAL cho prototyping nhanh và portable; LL/thanh ghi khi cần tốc độ, kích thước nhỏ, hoặc kiểm soát chính xác (ISR tần số cao). Thực tế thường kết hợp: CubeMX sinh khởi tạo, phần xử lý thời gian thực viết LL/thanh ghi. Quan trọng là hiểu HAL làm gì bên dưới.</div></details>
+<details><summary>Push-pull và open-drain khác nhau thế nào? Khi nào dùng open-drain?</summary><div>Push-pull chủ động lái cả mức 1 và 0. Open-drain chỉ kéo về 0, mức 1 do điện trở kéo lên → nhiều thiết bị nối chung một đường không bị chập (I2C, ngắt chia sẻ), có thể chuyển mức điện áp (kéo lên 5V nếu chân chịu được 5V — kiểm tra datasheet “FT” pin).</div></details>
+<details><summary>Tính PSC, ARR để timer 72 MHz tạo PWM 20 kHz với độ phân giải 1000 bước.</summary><div>(PSC+1)(ARR+1) = 72 000 000 / 20 000 = 3600. Chọn ARR+1 = 1000 → ARR = 999, PSC+1 = 3.6 → không nguyên. Chọn ARR+1 = 3600 (ARR = 3599, PSC = 0) → độ phân giải 3600 bước, hoặc ARR+1 = 1200, PSC = 2. Ý chính: tần số và độ phân giải đánh đổi nhau.</div></details>
+<details><summary>Chương trình bị HardFault, bạn debug thế nào?</summary><div>Viết HardFault_Handler lấy con trỏ stack (MSP/PSP theo bit 2 của LR), đọc PC và LR đã được stack → tra file .map/disassembly để tìm lệnh lỗi; đọc CFSR để biết loại lỗi (bus fault, usage fault, mem manage, precise/imprecise), BFAR/MMFAR cho địa chỉ lỗi. Nguyên nhân thường gặp: con trỏ NULL/rác, stack overflow, truy cập ngoại vi chưa bật clock, unaligned, gọi hàm qua con trỏ hàm sai.</div></details>
+<details><summary>Sau reset, STM32 chạy dùng clock nào?</summary><div>HSI (8 MHz trên F1). Code trong <code>SystemInit</code>/<code>SystemClock_Config</code> mới bật HSE, PLL và chuyển SYSCLK; cần chỉnh Flash latency (wait states) trước khi tăng tần số.</div></details>
+</div>
+<div class="cv"><h3>🔗 Liên hệ CV — Wireless Car</h3><p>STM32 làm gì trong xe? (đọc cảm biến siêu âm bằng input capture/timer? sinh PWM cho driver động cơ? nhận lệnh từ ESP qua UART?). Hãy nói rõ ngoại vi, chế độ (polling/interrupt/DMA) và lý do chọn.</p></div>
+<p class="src">Nguồn: <a href="https://www.st.com/resource/en/reference_manual/rm0008-stm32f101xx-stm32f102xx-stm32f103xx-stm32f105xx-and-stm32f107xx-advanced-armbased-32bit-mcus-stmicroelectronics.pdf" target="_blank" rel="noopener">RM0008 Reference Manual</a> · <a href="https://www.st.com/resource/en/datasheet/stm32f103c8.pdf" target="_blank" rel="noopener">STM32F103x8/xB Datasheet</a> · <a href="https://www.st.com/resource/en/user_manual/um1850-description-of-stm32f1-hal-and-lowlayer-drivers-stmicroelectronics.pdf" target="_blank" rel="noopener">UM1850 – STM32F1 HAL &amp; LL</a> · <a href="https://www.freertos.org/" target="_blank" rel="noopener">FreeRTOS</a></p>
+</section>
+
+<!-- ============ ESP32 ============ -->
+<section class="skill" id="esp32">
+<h2><span class="num">07</span> ESP32 / ESP8266 / ESP32-CAM <label class="donebox"><input type="checkbox" data-done="esp32"> Đã ôn</label></h2>
+<p class="lead">SoC Wi-Fi/Bluetooth của Espressif. Trong CV bạn dùng ESP32, ESP8266, ESP32-CAM và ESP-NOW → cần hiểu cả phần cứng lẫn ngăn xếp không dây.</p>
+
+<div class="lvl basic"><h3><span class="tag b">Cơ bản</span> Phần cứng & môi trường phát triển</h3>
+<div class="tbl"><table>
+<tr><th>Chip</th><th>CPU</th><th>Không dây</th></tr>
+<tr><td>ESP8266</td><td>Tensilica L106 1 nhân, 80/160 MHz</td><td>Wi-Fi 2.4 GHz</td></tr>
+<tr><td>ESP32 (gốc)</td><td>Xtensa LX6 2 nhân, tới 240 MHz, 520 KB SRAM</td><td>Wi-Fi b/g/n + Bluetooth 4.2 (Classic + BLE)</td></tr>
+<tr><td>ESP32-S3</td><td>Xtensa LX7 2 nhân</td><td>Wi-Fi + BLE 5</td></tr>
+<tr><td>ESP32-C3</td><td>RISC-V 1 nhân</td><td>Wi-Fi + BLE 5</td></tr>
+</table></div>
+<ul>
+<li><b>ESP32-CAM</b> (AI-Thinker): module ESP32 + camera OV2640 + PSRAM + khe microSD; không có USB-UART trên board → nạp qua USB-TTL, kéo GPIO0 xuống GND khi nạp.</li>
+<li>Framework: <b>ESP-IDF</b> (chính thức, C, dựa trên FreeRTOS, điểm vào <code>app_main()</code>) hoặc <b>Arduino core</b> (chạy trên ESP-IDF). Build/flash: <code>idf.py build flash monitor</code>.</li>
+<li>Lưu ý chân (ESP32 gốc): GPIO34–39 chỉ input, không có pull-up/down nội; GPIO6–11 nối Flash SPI — không dùng; strapping pin (GPIO0, 2, 5, 12, 15) ảnh hưởng chế độ boot; <b>ADC2 không dùng được khi Wi-Fi bật</b> → dùng ADC1.</li>
+<li>GPIO matrix: hầu hết ngoại vi (UART, SPI, I2C, PWM) có thể map ra chân bất kỳ.</li>
+</ul>
+</div>
+
+<div class="lvl adv"><h3><span class="tag a">Nâng cao</span> FreeRTOS, Wi-Fi, ESP-NOW, PWM</h3>
+<ul>
+<li><b>FreeRTOS</b>: <code>xTaskCreatePinnedToCore()</code> để gắn task vào nhân; Wi-Fi stack chạy chủ yếu trên core 0, Arduino <code>loop()</code> chạy trên core 1. Giao tiếp task: queue, semaphore, event group. Task chạy vòng lặp không nhường CPU sẽ kích hoạt <b>Task Watchdog</b>.</li>
+<li><b>Wi-Fi</b>: chế độ STA, AP, AP+STA; event-driven (event loop: got IP, disconnected…); ứng dụng HTTP server/client, WebSocket, MQTT.</li>
+<li><b>ESP-NOW</b>: giao thức của Espressif truyền gói trực tiếp giữa thiết bị theo địa chỉ MAC, <b>không cần access point hay kết nối</b> → độ trễ thấp, tiết kiệm năng lượng. Payload tối đa 250 byte (ESP-NOW v1.0; các bản ESP-IDF mới có v2.0 cho payload lớn hơn), tối đa 20 peer, các thiết bị phải cùng kênh Wi-Fi. Callback gửi báo trạng thái ACK tầng MAC; callback chạy trong task Wi-Fi → xử lý ngắn, đẩy dữ liệu sang queue.</li>
+<li><b>PWM</b>: ngoại vi <b>LEDC</b> (PWM đa dụng, chọn tần số và độ phân giải) và <b>MCPWM</b> (điều khiển động cơ, dead-time).</li>
+<li><b>ESP32-CAM streaming</b>: camera xuất JPEG; HTTP server gửi luồng MJPEG (<code>multipart/x-mixed-replace</code>) → trình duyệt hiển thị video. Giới hạn bởi băng thông Wi-Fi, độ phân giải, chất lượng JPEG, PSRAM.</li>
+</ul>
+<script type="text/plain" class="code">
+// ESP-NOW (Arduino core) – bên gửi, tối giản
+#include <esp_now.h>
+#include <WiFi.h>
+typedef struct { int8_t x, y; uint8_t mode; } cmd_t;   // gói lệnh điều khiển xe
+uint8_t peer[] = {0x24, 0x6F, 0x28, 0xAA, 0xBB, 0xCC}; // MAC bên nhận (ví dụ)
+
+void onSent(const uint8_t *mac, esp_now_send_status_t s) { /* s == ESP_NOW_SEND_SUCCESS ? */ }
+
+void setup() {
+  WiFi.mode(WIFI_STA);
+  esp_now_init();
+  esp_now_register_send_cb(onSent);   // chữ ký callback thay đổi theo phiên bản core – kiểm tra docs
+  esp_now_peer_info_t p = {};
+  memcpy(p.peer_addr, peer, 6); p.channel = 0; p.encrypt = false;
+  esp_now_add_peer(&p);
+}
+void loop() {
+  cmd_t c = { readX(), readY(), 1 };
+  esp_now_send(peer, (uint8_t *)&c, sizeof(c));
+  delay(20);                           // ~50 gói/giây
+}
+</script>
+</div>
+
+<div class="lvl deep"><h3><span class="tag d">Chuyên sâu</span> Bộ nhớ, OTA, năng lượng, bảo mật</h3>
+<ul>
+<li><b>Partition table</b>: nvs, phy_init, factory/ota_0/ota_1, otadata, spiffs/littlefs. <b>OTA</b>: ghi firmware mới vào phân vùng không chạy, kiểm tra, đổi otadata, khởi động lại; có rollback nếu app mới lỗi.</li>
+<li><b>NVS</b>: lưu key-value (cấu hình, Wi-Fi credentials) trong Flash có wear-leveling.</li>
+<li><b>Chế độ năng lượng</b>: Active, Modem-sleep, Light-sleep, Deep-sleep (chỉ RTC domain sống, giữ RTC memory, ULP coprocessor có thể chạy), Hibernation. Thức bằng timer, chân RTC GPIO, touch.</li>
+<li><b>Bảo mật</b>: Secure Boot, Flash Encryption, eFuse.</li>
+<li>Debug: log <code>ESP_LOGI</code>, core dump, giải mã backtrace khi panic (Guru Meditation Error), JTAG.</li>
+</ul>
+</div>
+
+<div class="qa"><h3><span class="tag q">Câu hỏi phỏng vấn</span></h3>
+<details><summary>Vì sao chọn ESP-NOW thay vì Wi-Fi (TCP/UDP) hay Bluetooth cho xe điều khiển?</summary><div>Không cần router/kết nối, ghép cặp đơn giản bằng MAC, độ trễ thấp, gói nhỏ phù hợp lệnh điều khiển. Hạn chế: payload nhỏ, không có cơ chế truyền lại tầng ứng dụng (chỉ ACK MAC), phải cùng kênh, bảo mật cần cấu hình riêng. Nên giải thích theo yêu cầu thực tế của dự án.</div></details>
+<details><summary>ESP32 khác STM32 ở điểm nào? Khi nào dùng cái nào?</summary><div>ESP32: có Wi-Fi/BT tích hợp, 2 nhân, RAM lớn, giá rẻ, nhưng tiêu thụ điện cao hơn, timing thời gian thực kém xác định hơn khi radio hoạt động, ít được dùng trong automotive. STM32: hệ sinh thái ngoại vi phong phú, real-time tốt, nhiều dòng low-power/automotive-grade. Dự án của bạn kết hợp: ESP lo không dây/camera, STM32 lo điều khiển thời gian thực.</div></details>
+<details><summary>Tại sao ADC đọc sai khi bật Wi-Fi?</summary><div>ADC2 bị driver Wi-Fi sử dụng → dùng ADC1 (GPIO32–39). Ngoài ra ADC ESP32 có độ phi tuyến, nên dùng API hiệu chuẩn (calibration).</div></details>
+<details><summary>Task Watchdog bị kích hoạt, nguyên nhân?</summary><div>Một task (thường idle task không được chạy) bị đói CPU do task khác lặp vô hạn không gọi <code>vTaskDelay</code>/block, hoặc ISR/callback chạy quá lâu.</div></details>
+</div>
+<div class="cv"><h3>🔗 Liên hệ CV — Wireless Car</h3><p>Chuẩn bị sơ đồ: Tay cầm (ESP + cảm biến gia tốc/joystick) → ESP-NOW → ESP trên xe → UART → STM32 → PWM → driver động cơ; ESP32-CAM → Wi-Fi → web. Câu hỏi xoáy: độ trễ đo được bao nhiêu? Mất gói thì xe làm gì (failsafe dừng xe sau X ms không nhận lệnh)? Gói UART định dạng thế nào?</p></div>
+<p class="src">Nguồn: <a href="https://docs.espressif.com/projects/esp-idf/en/latest/esp32/" target="_blank" rel="noopener">ESP-IDF Programming Guide</a> · <a href="https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/network/esp_now.html" target="_blank" rel="noopener">ESP-NOW API</a> · <a href="https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf" target="_blank" rel="noopener">ESP32 Datasheet</a> · <a href="https://docs.espressif.com/projects/arduino-esp32/en/latest/" target="_blank" rel="noopener">Arduino-ESP32 docs</a></p>
+</section>
+
+<!-- ============ ARDUINO ============ -->
+<section class="skill" id="arduino">
+<h2><span class="num">08</span> Arduino <label class="donebox"><input type="checkbox" data-done="arduino"> Đã ôn</label></h2>
+<p class="lead">Framework + hệ sinh thái board giúp prototyping nhanh. Điểm cộng khi phỏng vấn: hiểu <i>bên dưới</i> lớp trừu tượng và giới hạn của nó.</p>
+
+<div class="lvl basic"><h3><span class="tag b">Cơ bản</span> Board & API</h3>
+<ul>
+<li><b>Arduino Uno</b>: ATmega328P (AVR 8-bit) 16 MHz, Flash 32 KB (0.5 KB bootloader), SRAM 2 KB, EEPROM 1 KB; 14 chân digital (6 PWM: 3, 5, 6, 9, 10, 11), 6 chân analog in (ADC 10-bit), logic 5 V.</li>
+<li>API: <code>pinMode, digitalWrite, digitalRead, analogRead</code> (0–1023), <code>analogWrite</code> (PWM 0–255, ~490 Hz; chân 5, 6 ~980 Hz), <code>Serial</code>, <code>millis/micros</code>, thư viện <code>Wire</code> (I2C), <code>SPI</code>.</li>
+<li>Cấu trúc <code>setup()</code> chạy 1 lần, <code>loop()</code> lặp mãi.</li>
+</ul>
+</div>
+<div class="lvl adv"><h3><span class="tag a">Nâng cao</span> Non-blocking & ngắt</h3>
+<script type="text/plain" class="code">
+// Nháy LED không dùng delay() – an toàn cả khi millis() tràn (~49.7 ngày)
+unsigned long last = 0;
+const unsigned long INTERVAL = 500;
+volatile bool pressed = false;
+
+void onButton() { pressed = true; }                // ISR: ngắn gọn
+
+void setup() {
+  pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(2, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(2), onButton, FALLING);  // Uno: ngắt ngoài ở chân 2, 3
+}
+void loop() {
+  if (millis() - last >= INTERVAL) {               // phép trừ unsigned xử lý đúng khi tràn
+    last += INTERVAL;
+    digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
+  }
+  if (pressed) { pressed = false; /* xử lý */ }
+}
+</script>
+<ul><li><code>delay()</code> chặn CPU → không làm được việc khác; dùng <code>millis()</code> + state machine để đa nhiệm hợp tác.</li></ul>
+</div>
+<div class="lvl deep"><h3><span class="tag d">Chuyên sâu</span> Bên dưới lớp trừu tượng</h3>
+<ul>
+<li><code>main()</code> ẩn của Arduino: <code>init()</code> (cấu hình timer cho millis/PWM) → <code>setup()</code> → <code>for(;;) { loop(); serialEventRun(); }</code>.</li>
+<li><code>digitalWrite</code> chậm (tra bảng chân → port, kiểm tra PWM) — vài µs. Truy cập trực tiếp: <code>PORTB |= (1 &lt;&lt; PB5);</code> (chân 13 trên Uno) nhanh hơn nhiều.</li>
+<li>Hạn chế cho sản phẩm thật: ẩn chi tiết timing, thư viện chất lượng không đồng đều, khó kiểm soát bộ nhớ (String gây phân mảnh heap với 2 KB SRAM), không đáp ứng chuẩn an toàn.</li>
+</ul>
+</div>
+<div class="qa"><h3><span class="tag q">Câu hỏi phỏng vấn</span></h3>
+<details><summary>Arduino có phải là vi điều khiển không?</summary><div>Không. Arduino là nền tảng (board + framework + IDE). Vi điều khiển là chip trên board, ví dụ ATmega328P trên Uno; Arduino core cũng chạy trên ESP32, STM32…</div></details>
+<details><summary><code>analogWrite</code> có xuất điện áp analog thật không?</summary><div>Không, nó xuất PWM. Điện áp trung bình = duty × Vcc; muốn analog thật cần lọc RC hoặc dùng DAC.</div></details>
+<details><summary>Vì sao biến dùng trong ISR phải là <code>volatile</code>, và biến nhiều byte cần gì thêm?</summary><div>volatile để loop đọc giá trị mới. Trên AVR 8-bit, đọc biến 16/32-bit cần nhiều lệnh → phải tắt ngắt tạm thời (<code>noInterrupts()</code>/<code>interrupts()</code>) khi sao chép để tránh đọc nửa cũ nửa mới.</div></details>
+</div>
+<p class="src">Nguồn: <a href="https://docs.arduino.cc/language-reference/" target="_blank" rel="noopener">Arduino Language Reference</a> · <a href="https://docs.arduino.cc/hardware/uno-rev3/" target="_blank" rel="noopener">Arduino Uno Rev3</a> · <a href="https://github.com/arduino/ArduinoCore-avr" target="_blank" rel="noopener">ArduinoCore-avr (mã nguồn)</a></p>
+</section>
+
+<!-- ============ FPGA ============ -->
+<section class="skill" id="fpga">
+<h2><span class="num">09</span> FPGA <label class="donebox"><input type="checkbox" data-done="fpga"> Đã ôn</label></h2>
+<p class="lead">Mảng logic lập trình được: bạn “cấu hình phần cứng” thay vì chạy phần mềm. Câu hỏi trọng tâm: kiến trúc, design flow, timing constraint, so sánh với MCU/ASIC.</p>
+<div class="lvl basic"><h3><span class="tag b">Cơ bản</span> Kiến trúc & so sánh</h3>
+<ul>
+<li>Khối cơ bản: <b>LUT</b> (bảng tra hiện thực mọi hàm logic k đầu vào) + <b>flip-flop</b> → gọi là LE/ALM (Intel) hoặc slice/CLB (AMD-Xilinx); mạng định tuyến lập trình được; IOB; <b>Block RAM</b>; <b>DSP</b> (nhân-cộng); <b>PLL</b>/clock manager.</li>
+<li>Đa số FPGA dựa trên SRAM → mất cấu hình khi mất điện, nạp lại từ Flash ngoài lúc khởi động (một số dòng như Intel MAX 10 có Flash nội).</li>
+</ul>
+<div class="tbl"><table><tr><th></th><th>MCU</th><th>FPGA</th><th>ASIC</th></tr>
+<tr><td>Thực thi</td><td>Tuần tự (phần mềm)</td><td>Song song thật (phần cứng)</td><td>Song song, tối ưu nhất</td></tr>
+<tr><td>Linh hoạt</td><td>Cao</td><td>Cao (cấu hình lại)</td><td>Cố định sau sản xuất</td></tr>
+<tr><td>Chi phí</td><td>Thấp</td><td>Trung bình–cao/chip</td><td>NRE rất cao, rẻ khi sản lượng lớn</td></tr>
+<tr><td>Dùng khi</td><td>Điều khiển, giao tiếp</td><td>Xử lý tín hiệu tốc độ cao, prototype ASIC, giao thức tùy biến</td><td>Sản lượng lớn, hiệu năng/công suất tối ưu</td></tr></table></div>
+</div>
+<div class="lvl adv"><h3><span class="tag a">Nâng cao</span> Design flow & timing</h3>
+<div class="flow"><span>RTL (Verilog)</span><i>→</i><span>Mô phỏng (ModelSim/Questa)</span><i>→</i><span>Synthesis → netlist</span><i>→</i><span>Place &amp; Route</span><i>→</i><span>Static Timing Analysis</span><i>→</i><span>Bitstream (.sof/.bit)</span><i>→</i><span>Nạp qua JTAG</span></div>
+<ul>
+<li>Công cụ: Intel <b>Quartus Prime</b>, AMD <b>Vivado</b>; mã nguồn mở Yosys + nextpnr (Lattice).</li>
+<li>Constraint: gán chân (Pin Planner / XDC) và <b>clock</b>: <code>create_clock -name clk -period 20 [get_ports clk]</code> (50 MHz, cú pháp SDC/XDC).</li>
+<li><b>Slack</b> = thời gian yêu cầu − thời gian đến thực tế; slack âm → vi phạm timing → pipeline, giảm logic giữa 2 thanh ghi, hoặc giảm tần số.</li>
+<li>Debug trên chip: SignalTap (Intel), ILA (Xilinx) — logic analyzer nhúng.</li>
+</ul>
+</div>
+<div class="lvl deep"><h3><span class="tag d">Chuyên sâu</span> Hệ thống trên FPGA</h3>
+<ul>
+<li>Soft-core CPU (Nios II/Nios V của Intel, MicroBlaze của AMD), SoC FPGA có lõi ARM cứng (Zynq, Cyclone V SoC) — chia việc: phần mềm trên ARM, tăng tốc trên fabric.</li>
+<li>IP core (PLL, FIFO, RAM, UART, DDR controller); HLS (C/C++ → RTL).</li>
+<li>Ước lượng tài nguyên: LUT, FF, BRAM, DSP; báo cáo utilization và công suất.</li>
+</ul>
+</div>
+<div class="qa"><h3><span class="tag q">Câu hỏi phỏng vấn</span></h3>
+<details><summary>LUT hoạt động thế nào?</summary><div>LUT k đầu vào là một SRAM nhỏ 2<sup>k</sup> bit; đầu vào là địa chỉ, nội dung là bảng chân lý → hiện thực mọi hàm k biến với cùng độ trễ.</div></details>
+<details><summary>Bạn dùng board/tool nào cho CPU 16-bit? Đạt bao nhiêu MHz, tốn bao nhiêu tài nguyên?</summary><div>Câu hỏi cá nhân — xem lại báo cáo Quartus/Vivado của bạn (Fmax trong Timing Analyzer, Total logic elements, memory bits) để trả lời bằng số thật.</div></details>
+<details><summary>Tại sao không nên tạo clock bằng logic (chia clock bằng counter rồi đưa vào always @(posedge))?</summary><div>Clock sinh từ logic không đi trên mạng clock chuyên dụng → skew lớn, glitch, công cụ khó phân tích timing. Dùng PLL hoặc clock enable.</div></details>
+</div>
+<p class="src">Nguồn: <a href="https://www.intel.com/content/www/us/en/products/details/fpga/development-tools/quartus-prime.html" target="_blank" rel="noopener">Intel Quartus Prime</a> · <a href="https://docs.amd.com/r/en-US/ug903-vivado-using-constraints" target="_blank" rel="noopener">AMD UG903 – Vivado Using Constraints</a> · Harris &amp; Harris (chương FPGA)</p>
+</section>
+
+<!-- ============ GIT ============ -->
+<section class="skill" id="git">
+<h2><span class="num">10</span> Git / GitHub <label class="donebox"><input type="checkbox" data-done="git"> Đã ôn</label></h2>
+<p class="lead">Git là hệ quản lý phiên bản phân tán; GitHub là dịch vụ lưu trữ Git + cộng tác (PR, review, Issues, Actions). Phỏng vấn thường hỏi workflow nhóm và xử lý conflict.</p>
+<div class="lvl basic"><h3><span class="tag b">Cơ bản</span> Khái niệm & lệnh hằng ngày</h3>
+<div class="flow"><span>Working directory</span><i>— git add →</i><span>Staging area</span><i>— git commit →</i><span>Local repo</span><i>— git push →</i><span>Remote (GitHub)</span></div>
+<script type="text/plain" class="code">
+git clone <url>              # lấy repo về
+git status / git diff        # xem thay đổi
+git add file.c && git commit -m "uart: add ring buffer for RX"
+git switch -c feature/can-filter   # tạo nhánh mới (hoặc git checkout -b)
+git fetch origin             # lấy lịch sử mới, KHÔNG gộp
+git pull                     # = fetch + merge (hoặc --rebase)
+git push -u origin feature/can-filter
+git log --oneline --graph --all
+</script>
+<p><code>.gitignore</code> cho firmware: <code>build/</code>, <code>Debug/</code>, <code>*.o</code>, <code>*.elf</code>, <code>*.map</code>, file cấu hình IDE cá nhân.</p>
+</div>
+<div class="lvl adv"><h3><span class="tag a">Nâng cao</span> Nhánh, gộp, sửa lịch sử</h3>
+<div class="tbl"><table>
+<tr><th>Lệnh</th><th>Ý nghĩa</th></tr>
+<tr><td><code>merge</code></td><td>Gộp nhánh, giữ nguyên lịch sử, có thể tạo merge commit.</td></tr>
+<tr><td><code>rebase</code></td><td>“Dời” commit của bạn lên đầu nhánh khác → lịch sử thẳng; <b>viết lại lịch sử</b> → không rebase nhánh người khác đang dùng.</td></tr>
+<tr><td><code>reset --soft/--mixed/--hard</code></td><td>Lùi HEAD: giữ thay đổi ở staging / ở working dir / xóa hẳn.</td></tr>
+<tr><td><code>revert</code></td><td>Tạo commit mới đảo ngược commit cũ — an toàn trên nhánh chung.</td></tr>
+<tr><td><code>stash</code></td><td>Cất tạm thay đổi chưa commit.</td></tr>
+<tr><td><code>cherry-pick</code></td><td>Lấy một commit cụ thể sang nhánh hiện tại (vd. đưa bugfix sang nhánh release).</td></tr>
+<tr><td><code>tag</code></td><td>Đánh dấu phiên bản phát hành (v1.2.0 — Semantic Versioning).</td></tr>
+</table></div>
+<p><b>Merge conflict</b>: Git đánh dấu <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code> / <code>=======</code> / <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code> → sửa tay, build/test lại, <code>git add</code>, commit (hoặc <code>git rebase --continue</code>).</p>
+<p><b>Workflow</b>: feature branch + Pull Request + code review; Git Flow (main/develop/feature/release/hotfix) hoặc trunk-based.</p>
+</div>
+<div class="lvl deep"><h3><span class="tag d">Chuyên sâu</span> CI & công cụ nâng cao</h3>
+<script type="text/plain" class="code">
+# .github/workflows/build.yml – build firmware STM32 mỗi lần push (ví dụ)
+name: build
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y gcc-arm-none-eabi make
+      - run: make -j
+      - uses: actions/upload-artifact@v4
+        with: { name: firmware, path: build/*.elf }
+</script>
+<ul>
+<li><code>git bisect</code>: tìm commit gây lỗi bằng tìm kiếm nhị phân — rất hữu ích khi “firmware mới làm ECU lỗi”.</li>
+<li>Submodule (thư viện HAL/driver dùng chung), Git LFS cho file nhị phân lớn, commit message chuẩn (Conventional Commits), ký commit.</li>
+<li>Trong doanh nghiệp còn gặp Gerrit, Bitbucket, GitLab, hoặc hệ thống cũ (SVN, ClearCase) — khái niệm tương tự.</li>
+</ul>
+</div>
+<div class="qa"><h3><span class="tag q">Câu hỏi phỏng vấn</span></h3>
+<details><summary><code>git fetch</code> và <code>git pull</code> khác nhau thế nào?</summary><div>fetch chỉ tải commit mới về remote-tracking branch, không đụng code đang làm. pull = fetch + merge (hoặc rebase) vào nhánh hiện tại.</div></details>
+<details><summary>Lỡ commit nhầm file chứa mật khẩu và đã push, làm gì?</summary><div>Coi như bí mật đã lộ: thu hồi/đổi ngay. Sau đó xóa khỏi lịch sử (git filter-repo / BFG) và force-push có phối hợp với nhóm, thêm vào .gitignore. Chỉ xóa ở commit mới là không đủ vì lịch sử vẫn còn.</div></details>
+<details><summary>Merge hay rebase?</summary><div>Rebase cho nhánh cá nhân để lịch sử gọn trước khi tạo PR; merge cho nhánh chung để không viết lại lịch sử người khác. Tuân theo quy ước của nhóm.</div></details>
+</div>
+<p class="src">Nguồn: <a href="https://git-scm.com/book/en/v2" target="_blank" rel="noopener">Pro Git (git-scm.com)</a> · <a href="https://docs.github.com/en/actions" target="_blank" rel="noopener">GitHub Actions docs</a> · <a href="https://semver.org/" target="_blank" rel="noopener">semver.org</a> · <a href="https://www.conventionalcommits.org/" target="_blank" rel="noopener">Conventional Commits</a></p>
+</section>
+
+<div class="group-title">4 · Giao thức truyền thông & ngắt</div>
+
+<!-- ============ CAN ============ -->
+<section class="skill" id="can">
+<h2><span class="num">11</span> CAN (Controller Area Network) <label class="donebox"><input type="checkbox" data-done="can"> Đã ôn</label></h2>
+<p class="lead">Kỹ năng “ăn điểm” nhất vì gắn với kỳ thực tập tại Bosch. CAN do Bosch phát triển (công bố 1986), chuẩn hóa trong <b>ISO 11898</b>. Hãy nắm chắc frame, arbitration, bit stuffing, xử lý lỗi — và biết thêm CAN FD, DBC, UDS.</p>
+
+<div class="lvl basic"><h3><span class="tag b">Cơ bản</span> Đặc điểm & tầng vật lý</h3>
+<ul>
+<li><b>Multi-master, broadcast, message-based</b>: không có địa chỉ node; mỗi khung có <b>Identifier</b> vừa mô tả nội dung vừa quyết định <b>ưu tiên</b> (ID nhỏ hơn → ưu tiên cao hơn). Mọi node đều nhận, tự lọc bằng acceptance filter.</li>
+<li>Vi sai 2 dây <b>CAN_H / CAN_L</b> → chống nhiễu tốt. High-speed CAN (ISO 11898-2): <b>recessive</b> (logic 1) CAN_H ≈ CAN_L ≈ 2.5 V; <b>dominant</b> (logic 0) CAN_H ≈ 3.5 V, CAN_L ≈ 1.5 V (chênh ~2 V).</li>
+<li><b>Dominant thắng recessive</b>: nếu một node gửi 0 và node khác gửi 1, bus là 0 (wired-AND).</li>
+<li>Điện trở đầu cuối <b>120 Ω ở hai đầu bus</b> → đo giữa CAN_H–CAN_L khi tắt nguồn ≈ <b>60 Ω</b>.</li>
+<li>Tốc độ Classical CAN tới 1 Mbit/s (thường 125/250/500 kbit/s trong xe); tốc độ càng cao, chiều dài bus càng ngắn.</li>
+<li>Kiến trúc node: MCU (có <b>CAN controller</b>, vd. bxCAN trên STM32F1, FDCAN trên STM32G4/H7) + <b>CAN transceiver</b> (vd. TJA1050, MCP2551, SN65HVD230) chuyển TX/RX logic ↔ tín hiệu vi sai.</li>
+<li>ID: <b>11-bit</b> (CAN 2.0A, standard) hoặc <b>29-bit</b> (CAN 2.0B, extended).</li>
+</ul>
+<h4 class="sub">Cấu trúc Data Frame (standard, Classical CAN)</h4>
+<div class="frame">
+<span class="k1"><b>SOF</b>1</span><span class="k2"><b>Identifier</b>11</span><span class="k2"><b>RTR</b>1</span><span class="k3"><b>IDE</b>1</span><span class="k3"><b>r0</b>1</span><span class="k3"><b>DLC</b>4</span><span class="k4"><b>Data</b>0–64</span><span class="k1"><b>CRC</b>15</span><span><b>DEL</b>1</span><span class="k2"><b>ACK</b>1</span><span><b>DEL</b>1</span><span class="k3"><b>EOF</b>7</span><span><b>IFS</b>3</span>
+</div>
+<p style="font-size:13.5px;color:var(--muted)">Arbitration field = ID + RTR · Control field = IDE + r0 + DLC · Data 0–8 byte · ACK slot: transmitter gửi recessive, bất kỳ receiver nào nhận đúng sẽ ghi đè dominant.</p>
+<p>4 loại khung: <b>Data frame</b>, <b>Remote frame</b> (RTR = 1, yêu cầu dữ liệu, ít dùng), <b>Error frame</b>, <b>Overload frame</b>.</p>
+</div>
+
+<div class="lvl adv"><h3><span class="tag a">Nâng cao</span> Arbitration, bit stuffing, lỗi, bit timing</h3>
+<h4 class="sub">Arbitration không phá hủy (bitwise, CSMA/CR)</h4>
+<p>Các node cùng bắt đầu gửi; mỗi node vừa gửi vừa đọc lại bus. Node gửi recessive (1) mà đọc thấy dominant (0) → thua, chuyển sang nhận, thử lại sau. Khung thắng không bị hỏng, không mất thời gian.</p>
+<div class="tbl"><table>
+<tr><th>Bit ID (MSB→LSB)</th><td>10</td><td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr>
+<tr><th>Node A: 0x065</th><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>1</td><td><b>0</b></td><td>1</td></tr>
+<tr><th>Node B: 0x067</th><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>1</td><td><b>1 → thua</b></td><td>–</td></tr>
+</table></div>
+<p>Hệ quả: hai node không được gửi cùng một ID data frame; ID phải được thiết kế theo mức độ quan trọng của thông điệp. Nếu standard frame và extended frame trùng 11 bit ID đầu, standard data frame thắng: ở vị trí đó standard gửi RTR = 0 (dominant), còn extended gửi SRR = 1 (recessive).</p>
+<h4 class="sub">Bit stuffing</h4>
+<p>Sau <b>5 bit giống nhau liên tiếp</b>, transmitter chèn 1 bit ngược mức (áp dụng từ SOF đến hết CRC sequence) để receiver có đủ cạnh tín hiệu đồng bộ lại. Receiver tự bỏ stuff bit. Thấy 6 bit giống nhau → <b>stuff error</b>.</p>
+<h4 class="sub">5 loại lỗi</h4>
+<div class="tbl"><table>
+<tr><th>Lỗi</th><th>Phát hiện bởi</th><th>Mô tả</th></tr>
+<tr><td>Bit error</td><td>Transmitter</td><td>Gửi một mức nhưng đọc lại mức khác (trừ trong arbitration và ACK slot)</td></tr>
+<tr><td>Stuff error</td><td>Receiver</td><td>6 bit cùng mức liên tiếp trong vùng có stuffing</td></tr>
+<tr><td>CRC error</td><td>Receiver</td><td>CRC tính lại không khớp</td></tr>
+<tr><td>Form error</td><td>Receiver</td><td>Bit cố định (CRC delimiter, ACK delimiter, EOF) sai mức</td></tr>
+<tr><td>ACK error</td><td>Transmitter</td><td>Không thấy dominant trong ACK slot (không ai nhận được — vd. chỉ có 1 node trên bus)</td></tr>
+</table></div>
+<h4 class="sub">Fault confinement — TEC/REC</h4>
+<div class="flow"><span><b>Error Active</b><br>TEC ≤ 127 và REC ≤ 127<br>gửi active error flag (6 dominant)</span><i>→ TEC hoặc REC &gt; 127 →</i><span><b>Error Passive</b><br>gửi passive error flag (6 recessive), chờ thêm trước khi truyền lại</span><i>→ TEC &gt; 255 →</i><span><b>Bus Off</b><br>ngắt khỏi bus; phục hồi sau 128 × 11 bit recessive</span></div>
+<p>Truyền lỗi: TEC tăng 8; truyền thành công: TEC giảm 1 → node hỏng tự cô lập, không làm sập cả mạng.</p>
+<h4 class="sub">Bit timing</h4>
+<p>Một bit = <code>Sync_Seg (1 tq) + Prop_Seg + Phase_Seg1 + Phase_Seg2</code>; lấy mẫu giữa Phase_Seg1 và Phase_Seg2 (<b>sample point</b> thường ~75–87.5%); <b>SJW</b> cho phép kéo dài/rút ngắn để resync. Trên STM32 bxCAN: <code>bitrate = f<sub>APB1</sub> / (Prescaler × (1 + BS1 + BS2))</code>. Ví dụ 36 MHz / (9 × (1 + 6 + 1)) = 500 kbit/s, sample point = 7/8 = 87.5%.</p>
+<p><b>Acceptance filter</b>: chế độ mask (so ID theo các bit mặt nạ) hoặc list (danh sách ID chính xác) → giảm tải CPU.</p>
+</div>
+
+<div class="lvl deep"><h3><span class="tag d">Chuyên sâu</span> CAN FD, DBC, ISO-TP, UDS, AUTOSAR</h3>
+<h4 class="sub">CAN FD (ISO 11898-1:2015)</h4>
+<ul>
+<li>Payload tới <b>64 byte</b>; DLC 9–15 ánh xạ thành 12, 16, 20, 24, 32, 48, 64 byte.</li>
+<li>Bit mới: <b>FDF</b> (FD format), <b>BRS</b> (bit rate switch — pha dữ liệu chạy nhanh hơn, thường 2–5 Mbit/s), <b>ESI</b> (error state indicator). Không có remote frame. CRC-17 (≤16 byte) / CRC-21 (&gt;16 byte).</li>
+<li>Thế hệ tiếp theo: CAN XL (payload tới 2048 byte).</li>
+</ul>
+<h4 class="sub">DBC & tín hiệu</h4>
+<p>File DBC mô tả message (ID, DLC, node gửi) và signal (start bit, độ dài, byte order Intel/little-endian hoặc Motorola/big-endian, signed/unsigned, factor, offset, đơn vị). <code>physical = raw × factor + offset</code>. Ví dụ raw 4000, factor 0.25 → 1000 rpm. Công cụ: Vector CANoe/CANalyzer (scripting CAPL), PCAN-View, BusMaster, Linux <code>can-utils</code> (<code>candump</code>, <code>cansend</code>).</p>
+<h4 class="sub">ISO-TP (ISO 15765-2) — gửi dữ liệu dài hơn 8 byte</h4>
+<div class="tbl"><table>
+<tr><th>Frame</th><th>PCI (nibble đầu)</th><th>Vai trò</th></tr>
+<tr><td>Single Frame</td><td>0x0</td><td>Dữ liệu ≤ 7 byte (Classical CAN)</td></tr>
+<tr><td>First Frame</td><td>0x1</td><td>Khung đầu tiên, chứa tổng độ dài</td></tr>
+<tr><td>Consecutive Frame</td><td>0x2</td><td>Các khung tiếp theo, sequence number 0–15 quay vòng</td></tr>
+<tr><td>Flow Control</td><td>0x3</td><td>Receiver báo Block Size, STmin (khoảng cách tối thiểu)</td></tr>
+</table></div>
+<h4 class="sub">UDS (ISO 14229) — chẩn đoán & nạp phần mềm ECU</h4>
+<div class="tbl"><table>
+<tr><th>SID</th><th>Service</th><th>SID</th><th>Service</th></tr>
+<tr><td>0x10</td><td>DiagnosticSessionControl (01 default, 02 programming, 03 extended)</td><td>0x27</td><td>SecurityAccess (seed/key)</td></tr>
+<tr><td>0x11</td><td>ECUReset</td><td>0x28</td><td>CommunicationControl</td></tr>
+<tr><td>0x14</td><td>ClearDiagnosticInformation</td><td>0x31</td><td>RoutineControl</td></tr>
+<tr><td>0x19</td><td>ReadDTCInformation</td><td>0x34 / 0x36 / 0x37</td><td>RequestDownload / TransferData / RequestTransferExit</td></tr>
+<tr><td>0x22</td><td>ReadDataByIdentifier</td><td>0x3E</td><td>TesterPresent</td></tr>
+<tr><td>0x2E</td><td>WriteDataByIdentifier</td><td>0x85</td><td>ControlDTCSetting</td></tr>
+</table></div>
+<p>Phản hồi dương = SID + 0x40 (vd. <code>22 F1 90</code> → <code>62 F1 90 …</code>). Phản hồi âm: <code>7F &lt;SID&gt; &lt;NRC&gt;</code>, NRC hay gặp: 0x11 serviceNotSupported, 0x13 incorrectMessageLength, 0x22 conditionsNotCorrect, 0x31 requestOutOfRange, 0x33 securityAccessDenied, 0x35 invalidKey, 0x78 responsePending.</p>
+<p><b>Trình tự flash điển hình</b> (khác nhau theo OEM): Extended session → kiểm tra điều kiện (RoutineControl) → tắt DTC/giao tiếp (0x85, 0x28) → Programming session → SecurityAccess → Erase (RoutineControl) → RequestDownload → TransferData × N → RequestTransferExit → kiểm tra CRC/chữ ký → ECUReset.</p>
+<h4 class="sub">AUTOSAR Classic — ngăn xếp truyền thông CAN</h4>
+<div class="flow"><span>Application (SWC)</span><i>↔ RTE ↔</i><span>COM (signal ↔ PDU)</span><i>↔</i><span>PduR</span><i>↔</i><span>CanTp (ISO-TP)</span><i>/</i><span>CanIf</span><i>↔</i><span>Can Driver (MCAL)</span><i>↔</i><span>Controller + Transceiver</span></div>
+<p>Chẩn đoán: DCM (xử lý UDS), DEM (quản lý DTC/sự kiện lỗi).</p>
+</div>
+
+<div class="qa"><h3><span class="tag q">Câu hỏi phỏng vấn</span></h3>
+<details><summary>Tại sao CAN dùng tín hiệu vi sai và điện trở 120 Ω?</summary><div>Vi sai: nhiễu tác động như nhau lên hai dây nên bị triệt tiêu khi lấy hiệu. 120 Ω khớp trở kháng đặc tính của cáp xoắn → tránh phản xạ tín hiệu ở đầu cuối.</div></details>
+<details><summary>Đo CAN_H–CAN_L được 120 Ω (hoặc ~40 Ω) nghĩa là gì?</summary><div>~60 Ω: bình thường (hai điện trở 120 Ω song song). ~120 Ω: thiếu một điện trở đầu cuối. ~40 Ω: thừa một điện trở (ba cái song song). Gần 0 Ω: chập dây.</div></details>
+<details><summary>Giải thích arbitration. Vì sao gọi là “non-destructive”?</summary><div>Xem phần Nâng cao. Non-destructive vì khung có ưu tiên cao nhất tiếp tục truyền nguyên vẹn, không cần gửi lại — khác Ethernet cổ điển (CSMA/CD) nơi va chạm làm hỏng cả hai khung.</div></details>
+<details><summary>Chỉ có một node trên bus gửi liên tục thì chuyện gì xảy ra?</summary><div>Không ai ACK → ACK error → TEC tăng → node vào Error Passive. Theo chuẩn, ACK error khi đang ở Error Passive không làm TEC tăng thêm, nên node không vào Bus Off mà cứ gửi lại liên tục.</div></details>
+<details><summary>Bus Off là gì, ECU phục hồi thế nào?</summary><div>TEC &gt; 255 → controller ngừng tham gia bus. Phục hồi khi phát hiện 128 lần 11 bit recessive liên tiếp (và thường cần phần mềm cho phép — trong AUTOSAR do CanSM quản lý, có thời gian chờ và báo DTC).</div></details>
+<details><summary>Vì sao cần bit stuffing?</summary><div>CAN dùng mã NRZ, không có clock riêng; chuỗi dài cùng mức sẽ làm receiver mất đồng bộ. Stuff bit đảm bảo tối đa 5 bit mới có một cạnh để resync; đồng thời là một cơ chế phát hiện lỗi.</div></details>
+<details><summary>CAN và CAN FD khác nhau thế nào?</summary><div>Payload 8 → 64 byte, pha dữ liệu có thể chạy tốc độ cao hơn (BRS), CRC mạnh hơn (17/21 bit), không có remote frame, thêm bit FDF/BRS/ESI. Arbitration vẫn ở tốc độ danh định.</div></details>
+<details><summary>Một ECU không giao tiếp được sau khi flash. Bạn kiểm tra những gì?</summary><div>Gợi ý theo tầng: (1) Vật lý — nguồn, dây, điện trở đầu cuối, transceiver/chân standby, đo bằng oscilloscope; (2) Cấu hình — baudrate/bit timing, ID, filter khớp với mạng; (3) Phần mềm — flash có hoàn tất và kiểm tra CRC đạt không, ECU đang ở bootloader hay application, có DTC nào (0x19), session/security; (4) So sánh với phiên bản phần mềm trước, đọc log trên CANoe/trace. Liên hệ trường hợp thật bạn từng gặp ở Bosch (không tiết lộ thông tin bảo mật).</div></details>
+</div>
+<div class="cv"><h3>🔗 Liên hệ CV — Bosch Internship</h3>
+<ul>
+<li>“Analyzed CAN messages” → bị hỏi: bạn dùng tool gì, đọc trace thế nào, giải mã signal từ DBC ra sao, phát hiện bất thường gì.</li>
+<li>“Diagnosed and resolved ECU faults after flashing” → chuẩn bị 1 câu chuyện theo mô hình <b>STAR</b> (Situation – Task – Action – Result) và kiến thức UDS/DTC ở trên.</li>
+<li>Lưu ý: cảm biến vệ tinh của hệ thống airbag thường giao tiếp với ECU qua <b>PSI5</b> (giao diện cảm biến 2 dây dùng tín hiệu dòng), còn ECU airbag giao tiếp với các ECU khác qua CAN/CAN FD. Nắm khái niệm cơ bản PSI5 nếu dự án của bạn liên quan.</li>
+</ul></div>
+<p class="src">Nguồn: <a href="https://www.ti.com/lit/an/sloa101b/sloa101b.pdf" target="_blank" rel="noopener">TI SLOA101 – Introduction to the Controller Area Network</a> · <a href="https://www.iso.org/standard/63648.html" target="_blank" rel="noopener">ISO 11898-1:2015</a> · <a href="https://www.can-cia.org/can-knowledge/" target="_blank" rel="noopener">CAN in Automation (CiA) – CAN knowledge</a> · <a href="https://www.iso.org/standard/72439.html" target="_blank" rel="noopener">ISO 14229-1 (UDS)</a> · <a href="https://www.autosar.org/standards/classic-platform" target="_blank" rel="noopener">AUTOSAR Classic Platform</a> · <a href="https://www.psi5.org/" target="_blank" rel="noopener">psi5.org</a></p>
+</section>
+
+<!-- ============ UART ============ -->
+<section class="skill" id="uart">
+<h2><span class="num">12</span> UART <label class="donebox"><input type="checkbox" data-done="uart"> Đã ôn</label></h2>
+<p class="lead">Truyền nối tiếp <b>bất đồng bộ</b> (không có dây clock), full-duplex, điểm–điểm. Bạn dùng UART cho giao tiếp liên board trong dự án xe.</p>
+<div class="lvl basic"><h3><span class="tag b">Cơ bản</span> Khung truyền & cấu hình</h3>
+<ul><li>Dây: TX → RX, RX ← TX (bắt chéo), <b>chung GND</b>. Mức logic phải tương thích (3.3 V vs 5 V).</li>
+<li>Khung: line rảnh ở mức 1 → <b>start bit (0)</b> → 5–9 bit dữ liệu, <b>LSB trước</b> → parity (tùy chọn: even/odd) → <b>stop bit (1)</b>, 1/1.5/2 bit.</li>
+<li>Hai bên phải thống nhất <b>baud rate</b> và định dạng, ví dụ <b>115200 8N1</b>.</li></ul>
+<svg class="wave" viewBox="0 0 640 100" role="img" aria-label="Dạng sóng UART truyền ký tự A (0x41) định dạng 8N1">
+  <g fill="none" stroke="currentColor" stroke-width="2"><path d="M0 20 H40 V60 H92 V20 H144 V60 H404 V20 H456 V60 H508 V20 H640"/></g>
+  <g stroke="currentColor" stroke-opacity=".25" stroke-dasharray="3 3"><path d="M40 10 V70 M92 10 V70 M144 10 V70 M196 10 V70 M248 10 V70 M300 10 V70 M352 10 V70 M404 10 V70 M456 10 V70 M508 10 V70 M560 10 V70"/></g>
+  <g fill="currentColor" font-size="11" text-anchor="middle" font-family="ui-monospace,Menlo,monospace">
+    <text x="20" y="88">idle</text><text x="66" y="88">START</text><text x="118" y="88">D0=1</text><text x="170" y="88">D1=0</text><text x="222" y="88">D2=0</text><text x="274" y="88">D3=0</text><text x="326" y="88">D4=0</text><text x="378" y="88">D5=0</text><text x="430" y="88">D6=1</text><text x="482" y="88">D7=0</text><text x="534" y="88">STOP</text><text x="600" y="88">idle</text>
+  </g>
+</svg>
+<p style="font-size:13.5px;color:var(--muted)">Ký tự 'A' = 0x41 = 0100 0001, gửi LSB trước. 8N1 → 10 bit/byte → 115200 baud ≈ 11 520 byte/s.</p>
+</div>
+<div class="lvl adv"><h3><span class="tag a">Nâng cao</span> Sai số, lỗi, tầng vật lý, cách nhận dữ liệu</h3>
+<ul>
+<li>Receiver đồng bộ ở cạnh xuống của start bit, lấy mẫu giữa mỗi bit (thường oversampling 16× hoặc 8×). Sai lệch baud tích lũy đến stop bit → tổng sai lệch hai bên nên giữ dưới khoảng ±2–3% (con số chính xác phụ thuộc oversampling và độ dài khung — xem reference manual).</li>
+<li>Lỗi: <b>framing</b> (stop bit = 0), <b>parity</b>, <b>overrun</b> (byte mới đến khi byte cũ chưa đọc), <b>noise</b>.</li>
+<li>Flow control: phần cứng RTS/CTS, phần mềm XON/XOFF.</li>
+<li>Tầng vật lý: TTL/CMOS (0–3.3/5 V), <b>RS-232</b> (logic 1 = −3…−15 V, logic 0 = +3…+15 V, cần IC như MAX232), <b>RS-485</b> (vi sai, multi-drop, thường half-duplex, khoảng cách xa). <b>LIN</b> trong ô tô dựa trên UART (1 dây, master/slave, ≤ 20 kbit/s).</li>
+<li>USART = UART + chế độ đồng bộ (có chân clock).</li>
+<li>Cách nhận: polling (đơn giản, tốn CPU) → interrupt từng byte + ring buffer → <b>DMA + IDLE line</b> (hiệu quả nhất cho gói dài thay đổi).</li>
+</ul>
+</div>
+<div class="lvl deep"><h3><span class="tag d">Chuyên sâu</span> Thiết kế giao thức gói trên UART</h3>
+<p>UART chỉ truyền byte, không có khái niệm “gói” → phải tự định nghĩa khung ứng dụng:</p>
+<div class="frame"><span class="k1"><b>SOF</b>0xAA</span><span class="k2"><b>LEN</b>1 byte</span><span class="k3"><b>CMD</b>1 byte</span><span class="k4"><b>PAYLOAD</b>LEN byte</span><span class="k1"><b>CRC8 / checksum</b></span></div>
+<script type="text/plain" class="code">
+/* Parser dạng state machine – gọi cho từng byte lấy ra từ ring buffer */
+typedef enum { W_SOF, W_LEN, W_CMD, W_DATA, W_CRC } pst_t;
+static pst_t st = W_SOF; static uint8_t len, cmd, idx, buf[32], crc;
+
+void parse(uint8_t b) {
+    switch (st) {
+    case W_SOF:  if (b == 0xAA) { crc = 0; st = W_LEN; } break;
+    case W_LEN:  len = b; crc ^= b; idx = 0; st = (len <= sizeof buf) ? W_CMD : W_SOF; break;
+    case W_CMD:  cmd = b; crc ^= b; st = len ? W_DATA : W_CRC; break;
+    case W_DATA: buf[idx++] = b; crc ^= b; if (idx == len) st = W_CRC; break;
+    case W_CRC:  if (b == crc) handle(cmd, buf, len); st = W_SOF; break;   /* sai → bỏ gói */
+    }
+}
+</script>
+<ul><li>Bổ sung khi cần: byte stuffing/escape (nếu payload có thể chứa 0xAA), sequence number, timeout giữa các byte (reset parser), CRC thật (CRC-8/16) thay cho XOR.</li></ul>
+</div>
+<div class="qa"><h3><span class="tag q">Câu hỏi phỏng vấn</span></h3>
+<details><summary>Hai board giao tiếp UART nhận được rác, bạn kiểm tra gì?</summary><div>Baud rate/định dạng hai bên, clock nguồn (HSI kém chính xác hơn thạch anh), chung GND chưa, TX/RX có bắt chéo, mức điện áp, dùng logic analyzer/oscilloscope đo độ rộng bit thực tế.</div></details>
+<details><summary>Vì sao UART không cần dây clock?</summary><div>Hai bên đã thống nhất baud trước; receiver đồng bộ lại tại mỗi start bit, nên chỉ cần clock đủ chính xác trong một khung (~10 bit).</div></details>
+<details><summary>Tính thời gian truyền 100 byte ở 9600 8N1.</summary><div>100 × 10 bit / 9600 ≈ 104 ms.</div></details>
+</div>
+<div class="cv"><h3>🔗 Liên hệ CV</h3><p>“Handled inter-board communication” → mô tả định dạng gói thật giữa ESP và STM32, baud rate, cách phát hiện gói lỗi, và xử lý khi mất kết nối.</p></div>
+<p class="src">Nguồn: <a href="https://www.analog.com/en/resources/analog-dialogue/articles/uart-a-hardware-communication-protocol.html" target="_blank" rel="noopener">Analog Devices – UART: A Hardware Communication Protocol</a> · RM0008, chương USART (tính dung sai baud) · <a href="https://www.ti.com/lit/an/slla070d/slla070d.pdf" target="_blank" rel="noopener">TI SLLA070 – RS-422/RS-485</a></p>
+</section>
+
+<!-- ============ I2C ============ -->
+<section class="skill" id="i2c">
+<h2><span class="num">13</span> I2C <label class="donebox"><input type="checkbox" data-done="i2c"> Đã ôn</label></h2>
+<p class="lead">Bus nối tiếp <b>đồng bộ, half-duplex, 2 dây</b> (SDA, SCL), nhiều master/slave theo địa chỉ. Do Philips (nay NXP) phát triển; đặc tả chính thức là UM10204.</p>
+<div class="lvl basic"><h3><span class="tag b">Cơ bản</span> Đường truyền & giao dịch</h3>
+<ul>
+<li>Cả hai đường <b>open-drain + điện trở kéo lên</b>: thiết bị chỉ kéo xuống 0, mức 1 do pull-up → nhiều thiết bị chung bus không chập.</li>
+<li>Tốc độ: Standard 100 kbit/s, Fast 400 kbit/s, Fast-mode Plus 1 Mbit/s, High-speed 3.4 Mbit/s.</li>
+<li>Địa chỉ 7-bit (có chế độ 10-bit); byte đầu = địa chỉ &lt;&lt; 1 | R/W (0 = ghi, 1 = đọc). Ví dụ MPU6050 0x68 → 0xD0 (ghi) / 0xD1 (đọc).</li>
+<li><b>START</b>: SDA xuống khi SCL đang cao. <b>STOP</b>: SDA lên khi SCL đang cao. Dữ liệu chỉ được đổi khi SCL thấp, giữ ổn định khi SCL cao.</li>
+<li>Mỗi byte 8 bit (MSB trước) + 1 bit <b>ACK</b> (receiver kéo SDA xuống) / <b>NACK</b> (để SDA cao).</li>
+</ul>
+<h4 class="sub">Đọc một thanh ghi của cảm biến</h4>
+<div class="frame"><span class="k1"><b>S</b></span><span class="k2"><b>ADDR</b>7 bit</span><span class="k3"><b>W</b>0</span><span><b>A</b></span><span class="k4"><b>REG</b>8 bit</span><span><b>A</b></span><span class="k1"><b>Sr</b></span><span class="k2"><b>ADDR</b>7 bit</span><span class="k3"><b>R</b>1</span><span><b>A</b></span><span class="k4"><b>DATA</b>8 bit (slave gửi)</span><span><b>NACK</b> (master)</span><span class="k1"><b>P</b></span></div>
+<p style="font-size:13.5px;color:var(--muted)">Sr = Repeated START: đổi hướng truyền mà không nhả bus. Master gửi NACK ở byte cuối để báo dừng đọc.</p>
+</div>
+<div class="lvl adv"><h3><span class="tag a">Nâng cao</span> Clock stretching, arbitration, pull-up</h3>
+<ul>
+<li><b>Clock stretching</b>: slave giữ SCL thấp khi chưa sẵn sàng → master phải chờ.</li>
+<li><b>Multi-master arbitration</b> trên SDA: master gửi 1 mà thấy 0 → thua (cùng nguyên lý wired-AND như CAN).</li>
+<li><b>Chọn điện trở kéo lên</b> (UM10204): <code>R<sub>min</sub> = (V<sub>DD</sub> − V<sub>OL,max</sub>) / I<sub>OL</sub></code>, <code>R<sub>max</sub> = t<sub>r</sub> / (0.8473 × C<sub>b</sub>)</code>. Ví dụ 3.3 V, I<sub>OL</sub> = 3 mA → R<sub>min</sub> ≈ 967 Ω; Fast-mode t<sub>r</sub> = 300 ns, C<sub>b</sub> = 100 pF → R<sub>max</sub> ≈ 3.5 kΩ. Thực tế hay dùng 4.7 kΩ (100 kHz), 2.2 kΩ (400 kHz). Bus capacitance tối đa 400 pF (Standard/Fast).</li>
+<li>Kéo lên quá lớn → cạnh lên chậm, lỗi ở tốc độ cao; quá nhỏ → thiết bị không kéo xuống đủ thấp, tốn dòng.</li>
+<li>Địa chỉ dành riêng: 0x00–0x07 và 0x78–0x7F. Trùng địa chỉ → chọn chân địa chỉ khác (A0/AD0) hoặc dùng I2C multiplexer (vd. TCA9548A).</li>
+</ul>
+</div>
+<div class="lvl deep"><h3><span class="tag d">Chuyên sâu</span> Sự cố thực tế</h3>
+<ul>
+<li><b>Bus bị treo (SDA giữ thấp)</b>: slave bị reset giữa chừng khi đang gửi bit 0. Phục hồi: cấu hình SCL thành GPIO, phát tối đa 9 xung clock cho đến khi SDA nhả, rồi tạo STOP và khởi tạo lại ngoại vi.</li>
+<li>Debug bằng logic analyzer có decoder I2C: xem NACK ở byte địa chỉ (sai địa chỉ, thiết bị chưa cấp nguồn, thiếu pull-up).</li>
+<li>Biến thể: SMBus (timeout, mức điện áp khác), PMBus, I3C (kế thừa I2C, nhanh hơn, in-band interrupt).</li>
+<li>Luôn đọc errata của MCU — ngoại vi I2C của một số dòng (vd. STM32F1) có giới hạn đã được ghi nhận.</li>
+</ul>
+</div>
+<div class="qa"><h3><span class="tag q">Câu hỏi phỏng vấn</span></h3>
+<details><summary>Vì sao I2C dùng open-drain chứ không push-pull?</summary><div>Cho phép nhiều thiết bị cùng điều khiển một đường mà không chập nguồn–đất, hỗ trợ ACK, clock stretching và arbitration (wired-AND).</div></details>
+<details><summary>Master gửi địa chỉ nhưng nhận NACK — nguyên nhân?</summary><div>Sai địa chỉ (nhầm 7-bit với 8-bit đã dịch), slave chưa cấp nguồn/chưa sẵn sàng, thiếu pull-up, sai chân, mức điện áp không tương thích, bus đang treo.</div></details>
+<details><summary>Tối đa bao nhiêu thiết bị trên một bus I2C?</summary><div>Giới hạn bởi số địa chỉ (7-bit: 112 địa chỉ dùng được sau khi trừ địa chỉ dành riêng) và quan trọng hơn là bus capacitance (≤ 400 pF ở Standard/Fast).</div></details>
+</div>
+<p class="src">Nguồn: <a href="https://www.nxp.com/docs/en/user-guide/UM10204.pdf" target="_blank" rel="noopener">NXP UM10204 – I2C-bus specification and user manual</a> · <a href="https://www.ti.com/lit/an/slva689/slva689.pdf" target="_blank" rel="noopener">TI SLVA689 – I2C Bus Pullup Resistor Calculation</a></p>
+</section>
+
+<!-- ============ SPI ============ -->
+<section class="skill" id="spi">
+<h2><span class="num">14</span> SPI <label class="donebox"><input type="checkbox" data-done="spi"> Đã ôn</label></h2>
+<p class="lead">Bus nối tiếp <b>đồng bộ, full-duplex</b>, một master – nhiều slave, tốc độ cao (hàng chục MHz), không có địa chỉ và ACK.</p>
+<div class="lvl basic"><h3><span class="tag b">Cơ bản</span> Tín hiệu & nguyên lý</h3>
+<ul>
+<li>4 dây: <b>SCLK</b>, <b>MOSI</b> (master out), <b>MISO</b> (master in), <b>CS/SS</b> (chọn slave, tích cực mức thấp). Tên mới: SDO/SDI, PICO/POCI.</li>
+<li>Bản chất là hai thanh ghi dịch nối vòng: mỗi xung clock master đẩy 1 bit ra và nhận 1 bit vào → muốn đọc phải gửi (byte “dummy”).</li>
+<li>Nhiều slave: mỗi slave một chân CS riêng, hoặc daisy-chain.</li>
+</ul>
+<h4 class="sub">4 chế độ CPOL/CPHA</h4>
+<div class="tbl"><table>
+<tr><th>Mode</th><th>CPOL (mức nghỉ SCLK)</th><th>CPHA</th><th>Lấy mẫu dữ liệu</th></tr>
+<tr><td>0</td><td>0 (thấp)</td><td>0</td><td>Cạnh lên (cạnh đầu)</td></tr>
+<tr><td>1</td><td>0 (thấp)</td><td>1</td><td>Cạnh xuống (cạnh thứ hai)</td></tr>
+<tr><td>2</td><td>1 (cao)</td><td>0</td><td>Cạnh xuống (cạnh đầu)</td></tr>
+<tr><td>3</td><td>1 (cao)</td><td>1</td><td>Cạnh lên (cạnh thứ hai)</td></tr>
+</table></div>
+<p>Master phải cấu hình đúng mode mà datasheet slave yêu cầu (đa số dùng mode 0 hoặc 3), cùng thứ tự bit (thường MSB first) và tần số tối đa.</p>
+</div>
+<div class="lvl adv"><h3><span class="tag a">Nâng cao</span> Hiệu năng & biến thể</h3>
+<ul>
+<li>DMA cho truyền khối lớn (màn hình, Flash, ADC ngoài).</li>
+<li>CS điều khiển bằng phần cứng (NSS) hoặc GPIO phần mềm (linh hoạt hơn, phải đảm bảo thời gian setup/hold của CS).</li>
+<li><b>Dual/Quad SPI (QSPI)</b>: 2/4 đường dữ liệu, dùng cho Flash ngoài, có thể chạy execute-in-place (XIP).</li>
+<li>Lệnh SPI NOR Flash phổ biến: <code>0x9F</code> đọc JEDEC ID, <code>0x03</code> Read, <code>0x06</code> Write Enable, <code>0x02</code> Page Program, <code>0x20</code> Sector Erase (4 KB), <code>0x05</code> đọc Status Register (bit WIP).</li>
+</ul>
+</div>
+<div class="lvl deep"><h3><span class="tag d">Chuyên sâu</span> Tín hiệu tốc độ cao</h3>
+<ul><li>Ở tần số cao: đường dây dài gây phản xạ, ringing → giảm tốc độ, thêm điện trở nối tiếp (~22–33 Ω) gần nguồn, dây ngắn, mặt đất liên tục.</li>
+<li>Độ trễ vòng của MISO giới hạn tần số tối đa thực tế (dữ liệu slave phải về kịp trước cạnh lấy mẫu của master).</li>
+<li>SPI không có cơ chế phát hiện lỗi → nếu cần, thêm CRC ở tầng ứng dụng (một số ngoại vi STM32 có CRC phần cứng cho SPI).</li></ul>
+</div>
+<div class="qa"><h3><span class="tag q">Câu hỏi phỏng vấn</span></h3>
+<details><summary>Đọc từ slave SPI nhưng toàn nhận 0xFF hoặc dữ liệu lệch 1 bit — nguyên nhân?</summary><div>0xFF: slave chưa được chọn (CS sai), MISO thả nổi, slave chưa cấp nguồn. Lệch bit: sai CPOL/CPHA, tốc độ quá cao, sai thứ tự bit.</div></details>
+<details><summary>SPI hay I2C cho một cảm biến? Tiêu chí chọn?</summary><div>SPI: nhanh, full-duplex, đơn giản phần cứng nhưng tốn chân (thêm CS mỗi slave). I2C: 2 dây cho nhiều thiết bị, có ACK, nhưng chậm hơn, nhạy pull-up/điện dung. Chọn theo băng thông, số chân, khoảng cách, số thiết bị.</div></details>
+</div>
+<p class="src">Nguồn: <a href="https://www.analog.com/en/resources/analog-dialogue/articles/introduction-to-spi-interface.html" target="_blank" rel="noopener">Analog Devices – Introduction to SPI Interface</a> · <a href="https://www.sparkfun.com/spi_signal_names" target="_blank" rel="noopener">SparkFun / OSHWA – SPI signal names</a> · Datasheet SPI Flash (vd. Winbond W25Q)</p>
+</section>
+
+<!-- ============ PWM ============ -->
+<section class="skill" id="pwm">
+<h2><span class="num">15</span> PWM <label class="donebox"><input type="checkbox" data-done="pwm"> Đã ôn</label></h2>
+<p class="lead">Điều chế độ rộng xung: thay đổi tỉ lệ thời gian mức cao trong một chu kỳ cố định để điều khiển công suất trung bình — động cơ, LED, servo, buzzer.</p>
+<div class="lvl basic"><h3><span class="tag b">Cơ bản</span> Định nghĩa</h3>
+<ul><li>Chu kỳ T, tần số f = 1/T, <b>duty cycle D = T<sub>on</sub> / T</b>. Điện áp trung bình <code>V<sub>avg</sub> = D × V<sub>cc</sub></code> (ví dụ 12 V, D = 25% → 3 V trung bình).</li>
+<li>Ứng dụng: tốc độ động cơ DC (qua driver/H-bridge), độ sáng LED, <b>servo</b> (chu kỳ 20 ms = 50 Hz, độ rộng xung ~1–2 ms quyết định góc; dải cụ thể theo datasheet servo).</li>
+<li>H-bridge: 4 khóa, đổi chiều dòng qua động cơ → tiến/lùi; PWM ở chân enable hoặc chân điều khiển để chỉnh tốc độ.</li></ul>
+</div>
+<div class="lvl adv"><h3><span class="tag a">Nâng cao</span> Sinh PWM bằng timer</h3>
+<ul>
+<li><code>f<sub>PWM</sub> = f<sub>TIM</sub> / ((PSC + 1)(ARR + 1))</code>, <code>duty = CCR / (ARR + 1)</code> (PWM mode 1, đếm lên).</li>
+<li><b>Đánh đổi</b>: độ phân giải ≈ log<sub>2</sub>(f<sub>TIM</sub> / f<sub>PWM</sub>) bit. 72 MHz, 20 kHz → 3600 bước ≈ 11.8 bit.</li>
+<li>Edge-aligned vs <b>center-aligned</b> (đếm lên–xuống, xung đối xứng, tần số giảm một nửa với cùng ARR, ít hài — dùng trong điều khiển động cơ).</li>
+<li>Ngõ ra bù + <b>dead-time</b> (TIM1/TIM8 STM32, MCPWM ESP32): tránh hai khóa cùng nhánh dẫn đồng thời (shoot-through) gây chập.</li>
+<li>Cập nhật duty an toàn: bật preload (ARPE/OCxPE) để giá trị mới có hiệu lực ở update event, tránh xung lỗi.</li>
+</ul>
+<script type="text/plain" class="code">
+/* STM32 HAL: PWM 20 kHz trên TIM2 CH1, f_TIM = 72 MHz → PSC = 0, ARR = 3599 */
+HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
+void motor_set(uint8_t percent) {                      /* 0..100 % */
+    uint32_t ccr = (uint32_t)percent * (3599 + 1) / 100;
+    __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, ccr);
+}
+/* ESP32 Arduino (LEDC): API khác nhau giữa core 2.x (ledcSetup/ledcAttachPin) và 3.x (ledcAttach) – kiểm tra phiên bản */
+</script>
+</div>
+<div class="lvl deep"><h3><span class="tag d">Chuyên sâu</span> Chọn tần số & đo PWM</h3>
+<ul>
+<li>Động cơ: tần số trong dải nghe được (vài kHz) gây tiếng rít; tần số cao (&gt; ~20 kHz) êm hơn nhưng tăng tổn hao chuyển mạch — và phải nằm trong giới hạn của driver (xem datasheet). Tần số quá thấp → dòng gợn lớn, chạy giật.</li>
+<li>PWM + bộ lọc RC thông thấp = DAC đơn giản (tần số cắt ≪ f<sub>PWM</sub>).</li>
+<li>Đo PWM: timer chế độ <b>input capture</b>/PWM input — bắt cạnh lên và cạnh xuống để tính chu kỳ và duty.</li>
+<li>Điều khiển vòng kín: encoder đo tốc độ → PID → cập nhật duty.</li>
+</ul>
+</div>
+<div class="qa"><h3><span class="tag q">Câu hỏi phỏng vấn</span></h3>
+<details><summary>Tại sao không điều khiển tốc độ động cơ bằng cách giảm điện áp tuyến tính?</summary><div>Khóa tuyến tính tiêu tán công suất lớn dưới dạng nhiệt (P = V<sub>rơi</sub> × I). PWM để khóa ở trạng thái bật/tắt hoàn toàn → tổn hao thấp, hiệu suất cao.</div></details>
+<details><summary>Làm sao tạo PWM khi MCU hết kênh timer?</summary><div>Software PWM bằng ngắt timer (độ phân giải/tần số thấp, có jitter), dùng IC PWM ngoài qua I2C (vd. PCA9685), hoặc chọn MCU/chân khác.</div></details>
+</div>
+<div class="cv"><h3>🔗 Liên hệ CV</h3><p>Xe dual-mode: tần số PWM bạn chọn là bao nhiêu và vì sao? Rẽ trái/phải thực hiện bằng chênh lệch duty hai bánh hay dừng một bánh? Tín hiệu cử chỉ tay được ánh xạ thành duty như thế nào?</p></div>
+<p class="src">Nguồn: RM0008 (chương General-purpose / Advanced-control timers) · <a href="https://www.st.com/resource/en/application_note/an4013-introduction-to-timers-for-stm32-mcus-stmicroelectronics.pdf" target="_blank" rel="noopener">ST AN4013 – Introduction to timers for STM32</a> · <a href="https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/ledc.html" target="_blank" rel="noopener">ESP-IDF LEDC</a></p>
+</section>
+
+<!-- ============ INTERRUPT ============ -->
+<section class="skill" id="irq">
+<h2><span class="num">16</span> Interrupt <label class="donebox"><input type="checkbox" data-done="irq"> Đã ôn</label></h2>
+<p class="lead">Cơ chế để phần cứng “gọi” CPU khi có sự kiện, thay vì CPU liên tục hỏi (polling). Câu hỏi về ISR, ưu tiên, dữ liệu chia sẻ gần như chắc chắn xuất hiện.</p>
+<div class="lvl basic"><h3><span class="tag b">Cơ bản</span> Luồng xử lý ngắt</h3>
+<div class="flow"><span>Sự kiện → set cờ (pending)</span><i>→</i><span>NVIC so ưu tiên</span><i>→</i><span>Lưu ngữ cảnh (stacking)</span><i>→</i><span>Tra vector table → nhảy ISR</span><i>→</i><span>ISR xử lý + xóa cờ</span><i>→</i><span>Khôi phục ngữ cảnh → tiếp tục</span></div>
+<ul><li>Nguồn ngắt: chân ngoài (EXTI), timer, UART RX/TX, ADC xong, DMA xong, lỗi…</li>
+<li>Polling vs Interrupt: polling đơn giản nhưng tốn CPU, có thể bỏ sót sự kiện ngắn; interrupt đáp ứng nhanh, CPU rảnh làm việc khác hoặc ngủ.</li>
+<li>Vector table: bảng địa chỉ các ISR, đặt đầu Flash (có thể dời bằng VTOR).</li></ul>
+</div>
+<div class="lvl adv"><h3><span class="tag a">Nâng cao</span> Ưu tiên, lồng ngắt, viết ISR đúng</h3>
+<ul>
+<li>Cortex-M: <b>số ưu tiên nhỏ = ưu tiên cao</b>. Reset (−3), NMI (−2), HardFault (−1) cố định. Ưu tiên chia thành <b>preemption</b> (quyết định có ngắt chen được không) và <b>sub-priority</b> (chỉ quyết định thứ tự khi cùng pending).</li>
+<li>NVIC hỗ trợ <b>nested</b> (ngắt ưu tiên cao chen ngắt thấp), <b>tail-chaining</b> (chuyển thẳng sang ISR kế tiếp không cần unstack/stack lại), <b>late arrival</b>. Độ trễ vào ngắt Cortex-M3/M4: 12 chu kỳ (bộ nhớ zero wait state).</li>
+<li>Exception hệ thống: SVCall, PendSV, SysTick, MemManage, BusFault, UsageFault; IRQ ngoại vi bắt đầu từ exception số 16.</li>
+</ul>
+<h4 class="sub">Quy tắc viết ISR</h4>
+<ol><li>Ngắn và nhanh: đặt cờ / đẩy dữ liệu vào buffer, xử lý nặng để main/task làm (deferred processing).</li>
+<li>Không chặn: không <code>delay</code>, không chờ vòng lặp, không <code>printf</code>, không <code>malloc</code>.</li>
+<li>Biến chia sẻ khai báo <code>volatile</code>; truy cập nhiều bước ở main phải bảo vệ bằng critical section.</li>
+<li>Xóa cờ ngắt — và xóa sớm hoặc thêm <code>__DSB()</code>: do write buffer, nếu xóa cờ ngay trước khi return, ISR có thể bị gọi lại lần nữa.</li>
+<li>Chỉ gọi hàm reentrant/an toàn trong ISR; với RTOS chỉ dùng API <code>…FromISR</code>.</li></ol>
+<script type="text/plain" class="code">
+volatile uint32_t ticks;                 /* ISR ghi, main đọc */
+
+void TIM2_IRQHandler(void) {
+    if (TIM2->SR & TIM_SR_UIF) {
+        TIM2->SR = ~TIM_SR_UIF;          /* xóa cờ trước (rc_w0: ghi 0 để xóa) */
+        ticks++;
+    }
+}
+
+uint32_t get_ticks_and_reset(void) {     /* đọc–rồi–xóa phải nguyên tử */
+    uint32_t primask = __get_PRIMASK();
+    __disable_irq();
+    uint32_t t = ticks; ticks = 0;
+    __set_PRIMASK(primask);              /* khôi phục trạng thái cũ, không bật bừa */
+    return t;
+}
+
+/* FreeRTOS: deferred processing */
+void USART1_IRQHandler(void) {
+    BaseType_t woken = pdFALSE;
+    uint8_t b = (uint8_t)USART1->DR;
+    xQueueSendFromISR(rxQueue, &b, &woken);
+    portYIELD_FROM_ISR(woken);           /* chuyển ngay sang task ưu tiên cao vừa được đánh thức */
+}
+</script>
+</div>
+<div class="lvl deep"><h3><span class="tag d">Chuyên sâu</span> Latency, RTOS, độ tin cậy</h3>
+<ul>
+<li><b>Interrupt latency & jitter</b>: bị ảnh hưởng bởi critical section dài, ISR ưu tiên cao hơn đang chạy, wait state Flash. Đo bằng cách bật GPIO đầu ISR và xem trên oscilloscope.</li>
+<li><b>FreeRTOS trên Cortex-M</b>: ngắt gọi API phải có ưu tiên số ≥ <code>configMAX_SYSCALL_INTERRUPT_PRIORITY</code>; ngắt ưu tiên cao hơn không bị kernel che (latency thấp nhất) nhưng không được gọi API.</li>
+<li><b>Priority inversion</b>: task thấp giữ mutex, task cao chờ, task trung bình chiếm CPU → task cao bị trễ vô hạn (sự cố Mars Pathfinder 1997). Giải pháp: <b>priority inheritance</b> (mutex FreeRTOS có sẵn) hoặc priority ceiling.</li>
+<li><b>Debounce nút nhấn</b>: không xử lý trực tiếp mỗi cạnh EXTI; dùng timer kiểm tra lại sau ~10–50 ms hoặc lọc phần cứng RC + Schmitt trigger.</li>
+<li>Ngắt dồn dập (interrupt storm) làm treo main → giới hạn tần suất, tắt nguồn ngắt tạm thời, dùng DMA.</li>
+</ul>
+</div>
+<div class="qa"><h3><span class="tag q">Câu hỏi phỏng vấn</span></h3>
+<details><summary>Điều gì xảy ra khi hai ngắt cùng xảy ra?</summary><div>NVIC chọn ngắt có preemption priority cao hơn; nếu bằng nhau → sub-priority; nếu vẫn bằng → số IRQ nhỏ hơn. Ngắt còn lại ở trạng thái pending và chạy ngay sau (tail-chaining).</div></details>
+<details><summary>Tại sao không được gọi <code>printf</code>/<code>HAL_Delay</code> trong ISR?</summary><div>printf chậm, thường không reentrant, có thể dùng malloc/khóa. HAL_Delay dựa trên ngắt SysTick: nếu ISR hiện tại có ưu tiên cao hơn hoặc bằng SysTick, tick không tăng → treo mãi.</div></details>
+<details><summary>Biến 32-bit chia sẻ ISR–main trên Cortex-M có cần critical section không?</summary><div>Đọc hoặc ghi một word 32-bit căn hàng là nguyên tử trên Cortex-M3/M4. Nhưng thao tác đọc–sửa–ghi (<code>x++</code>, đọc rồi xóa) hoặc biến 64-bit/struct thì không → cần critical section hoặc LDREX/STREX.</div></details>
+<details><summary>Interrupt và exception khác nhau thế nào (trên ARM)?</summary><div>Exception là khái niệm chung cho mọi sự kiện làm thay đổi luồng thực thi bình thường; interrupt (IRQ) là exception do ngoại vi bên ngoài lõi gây ra. Fault (HardFault, BusFault…) và SVC là exception nội bộ.</div></details>
+</div>
+<div class="cv"><h3>🔗 Liên hệ CV</h3><p>Xe dùng ngắt ở đâu? (UART RX, timer đo xung siêu âm, ngắt chân Echo). Cảm biến siêu âm: đo độ rộng xung Echo bằng input capture → khoảng cách = thời gian × 343 m/s / 2.</p></div>
+<p class="src">Nguồn: <a href="https://developer.arm.com/documentation/dui0552/a/" target="_blank" rel="noopener">ARM DUI0552 – mục Exception model</a> · <a href="https://www.freertos.org/" target="_blank" rel="noopener">FreeRTOS (tìm “RTOS for ARM Cortex-M”)</a> · <a href="https://developer.arm.com/documentation/dai0321/latest/" target="_blank" rel="noopener">ARM AN321 – Cortex-M programming guide to memory barrier instructions</a></p>
+</section>
+
+<div class="group-title">5 · Ngôn ngữ & tổng hợp</div>
+
+<!-- ============ ENGLISH ============ -->
+<section class="skill" id="english">
+<h2><span class="num">17</span> Technical English Reading &amp; Researching <label class="donebox"><input type="checkbox" data-done="english"> Đã ôn</label></h2>
+<p class="lead">Người phỏng vấn có thể kiểm tra bằng cách đưa một trang datasheet và hỏi ý nghĩa, hoặc yêu cầu giới thiệu bản thân bằng tiếng Anh.</p>
+<div class="lvl basic"><h3><span class="tag b">Cơ bản</span> Các loại tài liệu kỹ thuật</h3>
+<div class="tbl"><table>
+<tr><th>Tài liệu</th><th>Chứa gì</th></tr>
+<tr><td>Datasheet</td><td>Thông số điện, sơ đồ chân, package, đặc tính, timing của <i>một chip cụ thể</i></td></tr>
+<tr><td>Reference Manual</td><td>Mô tả chi tiết ngoại vi và thanh ghi của <i>cả họ</i> chip (vd. RM0008)</td></tr>
+<tr><td>Programming Manual</td><td>Lõi CPU: tập lệnh, NVIC, SysTick (vd. PM0056 cho Cortex-M3 của ST)</td></tr>
+<tr><td>Errata sheet</td><td>Lỗi phần cứng đã biết và cách khắc phục</td></tr>
+<tr><td>Application Note</td><td>Hướng dẫn áp dụng cho một bài toán cụ thể</td></tr>
+<tr><td>User Manual (board)</td><td>Sơ đồ board, jumper, kết nối</td></tr>
+</table></div>
+<h4 class="sub">Đọc datasheet theo thứ tự</h4>
+<ol><li>Features/Overview → có đáp ứng yêu cầu không.</li><li>Pinout &amp; pin description.</li><li><b>Absolute Maximum Ratings</b> (vượt quá là hỏng — <i>không</i> phải điều kiện làm việc) vs <b>Recommended Operating Conditions</b>.</li><li>Electrical Characteristics (min/typ/max).</li><li>Timing diagrams.</li><li>Register map / Application circuit.</li></ol>
+</div>
+<div class="lvl adv"><h3><span class="tag a">Nâng cao</span> Từ vựng hay gặp</h3>
+<div class="tbl"><table>
+<tr><th>Thuật ngữ</th><th>Nghĩa</th><th>Thuật ngữ</th><th>Nghĩa</th></tr>
+<tr><td>assert / de-assert</td><td>kích hoạt / bỏ kích hoạt tín hiệu</td><td>active-low (nRESET, CS̅)</td><td>tích cực mức thấp</td></tr>
+<tr><td>reserved</td><td>bit dành riêng, giữ giá trị reset</td><td>reset value</td><td>giá trị sau reset</td></tr>
+<tr><td>RW / RO / WO</td><td>đọc-ghi / chỉ đọc / chỉ ghi</td><td>rc_w1 / rc_w0 (W1C)</td><td>xóa bằng cách ghi 1 / ghi 0</td></tr>
+<tr><td>pull-up / pull-down</td><td>điện trở kéo lên / xuống</td><td>sink / source current</td><td>dòng chân hút vào / cấp ra</td></tr>
+<tr><td>propagation delay</td><td>trễ lan truyền</td><td>throughput / latency</td><td>thông lượng / độ trễ</td></tr>
+<tr><td>debounce</td><td>chống dội</td><td>brown-out</td><td>sụt áp nguồn</td></tr>
+<tr><td>don't care (X)</td><td>giá trị nào cũng được</td><td>tolerance</td><td>dung sai</td></tr>
+</table></div>
+<h4 class="sub">Phương pháp research</h4>
+<ol><li>Tài liệu chính thức của hãng (datasheet, RM, errata, app note) — nguồn đúng nhất.</li><li>Ví dụ chính thức (STM32Cube examples, ESP-IDF examples).</li><li>Chuẩn (ISO, đặc tả giao thức) khi cần độ chính xác.</li><li>Diễn đàn (ST Community, ESP32 forum, Stack Overflow) — đối chiếu lại với tài liệu chính thức.</li><li>Ghi chép lại: vấn đề, nguồn, kết luận → tái sử dụng.</li></ol>
+</div>
+<div class="lvl deep"><h3><span class="tag d">Vận dụng</span> Giới thiệu bản thân (mẫu, chỉnh lại theo giọng của bạn)</h3>
+<pre><code>Good morning. My name is Vu, a final-year student majoring in Computer and
+Embedded Systems at VNU University of Science, with a GPA of 8.76 out of 10.
+
+I am currently an intern at Bosch Global Software Technologies, working in
+the automotive domain. My work includes manual testing of airbag sensors
+following standard procedures, analyzing CAN messages between ECUs,
+troubleshooting ECU issues after software flashing, and running automated
+tests in a Software-in-the-Loop environment.
+
+Besides that, I built a dual-mode wireless car using STM32 and ESP32 with
+ESP-NOW, UART and PWM, where I was responsible for system design, the PCB
+and inter-board communication. I also designed a simple 16-bit CPU in
+Verilog and verified it on ModelSim and an FPGA board.
+
+I am looking for a fresher embedded engineer position where I can apply
+my knowledge to real products and keep growing as an embedded engineer.</code></pre>
+<p>Cụm từ hữu ích khi không nghe rõ / cần thời gian: “Could you please rephrase the question?”, “Let me think about it for a moment.”, “To make sure I understand correctly, you are asking about…”, “I haven’t worked with that directly, but my understanding is…”.</p>
+</div>
+<div class="qa"><h3><span class="tag q">Câu hỏi phỏng vấn</span></h3>
+<details><summary>Absolute Maximum Rating khác Recommended Operating Condition thế nào?</summary><div>AMR là giới hạn chịu đựng — vượt qua có thể hỏng vĩnh viễn, và hoạt động ở sát giá trị này không được đảm bảo chức năng. Thiết kế phải nằm trong Recommended Operating Conditions.</div></details>
+<details><summary>“Tell me about a time you had to learn something new quickly.” (hành vi)</summary><div>Dùng STAR: ví dụ lần đầu làm việc với CAN/SIL ở Bosch — tình huống, nhiệm vụ, bạn đã đọc tài liệu/hỏi mentor/thử nghiệm ra sao, kết quả đo được.</div></details>
+</div>
+<p class="src">Nguồn: <a href="https://www.st.com/resource/en/programming_manual/pm0056-stm32f10xxx20xxx21xxxl1xxxx-cortexm3-programming-manual-stmicroelectronics.pdf" target="_blank" rel="noopener">ST PM0056 – Cortex-M3 programming manual</a> · <a href="https://www.st.com/resource/en/datasheet/stm32f103c8.pdf" target="_blank" rel="noopener">STM32F103x8 Datasheet (bài tập đọc datasheet)</a></p>
+</section>
+
+<!-- ============ COMPARE ============ -->
+<section class="skill" id="compare">
+<h2>📊 Bảng so sánh giao thức (câu hỏi “kinh điển”)</h2>
+<div class="tbl"><table>
+<tr><th></th><th>UART</th><th>I2C</th><th>SPI</th><th>CAN</th></tr>
+<tr><td>Đồng bộ</td><td>Bất đồng bộ</td><td>Đồng bộ (SCL)</td><td>Đồng bộ (SCLK)</td><td>Bất đồng bộ (resync theo cạnh)</td></tr>
+<tr><td>Số dây</td><td>2 (TX, RX) + GND</td><td>2 (SDA, SCL) + GND</td><td>3 + 1 CS/slave</td><td>2 vi sai (CAN_H, CAN_L)</td></tr>
+<tr><td>Duplex</td><td>Full</td><td>Half</td><td>Full</td><td>Half</td></tr>
+<tr><td>Topology</td><td>Điểm–điểm</td><td>Bus, multi-master, địa chỉ</td><td>1 master – nhiều slave (CS)</td><td>Bus multi-master, theo message ID</td></tr>
+<tr><td>Tốc độ điển hình</td><td>9.6k–vài Mbit/s</td><td>100k / 400k / 1M</td><td>Vài–hàng chục MHz</td><td>≤ 1 Mbit/s (FD: pha data cao hơn)</td></tr>
+<tr><td>Xác nhận / lỗi</td><td>Parity (tùy chọn)</td><td>ACK/NACK</td><td>Không</td><td>CRC, ACK, 5 loại lỗi, fault confinement</td></tr>
+<tr><td>Khoảng cách</td><td>Ngắn (TTL); RS-485 xa</td><td>Trên board</td><td>Trên board</td><td>Cả xe (vài chục m ở 500k)</td></tr>
+<tr><td>Dùng cho</td><td>Debug, module GPS/BT, liên board</td><td>Cảm biến, EEPROM, RTC</td><td>Flash, màn hình, ADC tốc độ cao</td><td>Mạng ECU trong ô tô, công nghiệp</td></tr>
+</table></div>
+</section>
+
+<!-- ============ AUTOMOTIVE ============ -->
+<section class="skill" id="auto">
+<h2>🚗 Phụ lục: Kiến thức automotive liên quan mục Experience</h2>
+<p class="lead">Không nằm trong mục Skill nhưng CV ghi SIL, Test Automation, Manual Testing, ECU → người phỏng vấn sẽ hỏi.</p>
+<div class="grid2">
+<div class="card"><h5>V-Model</h5><p>Nhánh trái: Requirements → System design → Architecture → Module design → Code. Nhánh phải tương ứng: Unit test → Integration test → System test → Acceptance test. Mỗi mức kiểm thử truy vết (traceability) về yêu cầu tương ứng. ASPICE đánh giá năng lực quy trình theo mô hình này.</p></div>
+<div class="card"><h5>MIL / SIL / PIL / HIL</h5><p><b>MIL</b>: mô hình (Simulink) chạy mô phỏng. <b>SIL</b>: mã nguồn thật biên dịch chạy trên PC với môi trường giả lập ECU. <b>PIL</b>: code chạy trên vi xử lý đích. <b>HIL</b>: ECU thật nối với bộ mô phỏng thời gian thực của xe/cảm biến. Đi từ trái sang phải: càng sát thực tế, càng đắt, phát hiện lỗi càng muộn.</p></div>
+<div class="card"><h5>ISO 26262 (Functional Safety)</h5><p>Mức ASIL A → D (D nghiêm ngặt nhất) xác định từ Severity, Exposure, Controllability. Hệ thống airbag thường có yêu cầu ASIL cao. Ảnh hưởng: yêu cầu coverage, review, coding guideline (MISRA), traceability.</p></div>
+<div class="card"><h5>Thiết kế test case</h5><p>Equivalence partitioning, boundary value analysis, kiểm thử dương/âm, fault injection. Một test case gồm: ID, yêu cầu được truy vết, điều kiện đầu, bước thực hiện, kết quả mong đợi, kết quả thực tế, pass/fail.</p></div>
+<div class="card"><h5>Test automation</h5><p>Script (thường Python, hoặc CAPL trong CANoe) điều khiển môi trường: gửi kích thích, đọc phản hồi, so sánh với kỳ vọng, sinh báo cáo. Lợi ích: lặp lại được, chạy regression mỗi khi có phần mềm mới.</p></div>
+<div class="card"><h5>DTC & chẩn đoán</h5><p>DTC = mã lỗi lưu trong ECU kèm status byte (testFailed, confirmedDTC…) và snapshot/extended data. Đọc bằng UDS 0x19, xóa bằng 0x14.</p></div>
+</div>
+<div class="warn">Khi kể về kỳ thực tập: chỉ nói ở mức khái niệm/quy trình, <b>không tiết lộ</b> thông tin nội bộ, tên dự án khách hàng hay tài liệu bảo mật của Bosch — người phỏng vấn đánh giá cao điều này.</div>
+<p class="src">Nguồn: <a href="https://www.iso.org/standard/68383.html" target="_blank" rel="noopener">ISO 26262-1:2018</a> · <a href="https://vda-qmc.de/" target="_blank" rel="noopener">Automotive SPICE (VDA QMC)</a> · <a href="https://www.istqb.org/" target="_blank" rel="noopener">ISTQB (kỹ thuật thiết kế test)</a></p>
+</section>
+
+<!-- ============ CV NOTES ============ -->
+<section class="skill" id="cvcheck">
+<h2>📝 Ghi chú về CV (nên sửa trước khi nộp)</h2>
+<ul>
+<li>“<b>Junly</b> 2026” → lỗi chính tả, sửa thành “July 2026”.</li>
+<li>“KnowLedge” → “Knowledge”; tiêu đề “SKILL” → “SKILLS”, “PROJECT” → “PROJECTS”.</li>
+<li>“Logical Circuit and CPU design” → cách gọi phổ biến hơn: “Digital Logic Design and CPU Architecture”.</li>
+<li>“EMBEDDED ENGINEERING” dưới tên → nên là chức danh mục tiêu: “Embedded Software Engineer (Fresher)”.</li>
+<li>Thực tập đang diễn ra (đến 12/2026) → ghi “July 2026 – Present” hoặc giữ nguyên nhưng hiểu rằng người phỏng vấn sẽ hỏi bạn đang làm gì ở thời điểm hiện tại.</li>
+<li>Mọi từ khóa trong CV đều có thể bị hỏi: nếu một mục (vd. C++, Assembly, Interrupt) bạn chưa tự tin giải thích được ở mức “Nâng cao” của tài liệu này, hãy ôn thêm hoặc cân nhắc diễn đạt chính xác hơn.</li>
+<li>Bổ sung số liệu cho dự án nếu có (độ trễ điều khiển, khoảng cách, tần số CPU trên FPGA, số lệnh) và link GitHub — bạn đã liệt kê GitHub trong Skill.</li>
+</ul>
+</section>
+
+<p class="src" style="text-align:center;margin-top:30px">Tài liệu ôn tập cá nhân. Thông số kỹ thuật (địa chỉ thanh ghi, tần số, giới hạn) lấy theo tài liệu chính thức được dẫn ở cuối mỗi mục — luôn đối chiếu với datasheet/reference manual của đúng chip bạn dùng.</p>
+</main>
+</div>
+
+<script>
+(function(){
+  // 1) Render code blocks from <script type="text/plain" class="code">
+  document.querySelectorAll('script[type="text/plain"].code').forEach(function(s){
+    var pre=document.createElement('pre'), code=document.createElement('code');
+    code.textContent=s.textContent.replace(/^\n+|\s+$/g,'');
+    pre.appendChild(code); s.parentNode.replaceChild(pre,s);
+  });
+
+  // 2) Level filter
+  var btns=document.querySelectorAll('.toolbar button[data-f]');
+  btns.forEach(function(b){
+    b.addEventListener('click',function(){
+      btns.forEach(function(x){x.setAttribute('aria-pressed','false');});
+      b.setAttribute('aria-pressed','true');
+      document.body.classList.remove('f-basic','f-adv','f-deep','f-qa');
+      if(b.dataset.f!=='all') document.body.classList.add('f-'+b.dataset.f);
+    });
+  });
+
+  // 3) Expand/collapse all answers
+  var open=false;
+  document.getElementById('toggleAll').addEventListener('click',function(){
+    open=!open;
+    document.querySelectorAll('.qa details').forEach(function(d){d.open=open;});
+  });
+
+  // 4) Search: hide skill sections without the term
+  var sections=[].slice.call(document.querySelectorAll('section.skill'));
+  document.getElementById('search').addEventListener('input',function(e){
+    var q=e.target.value.trim().toLowerCase();
+    sections.forEach(function(s){
+      s.classList.toggle('hidden', q.length>1 && s.textContent.toLowerCase().indexOf(q)===-1);
+    });
+    document.querySelectorAll('.group-title').forEach(function(g){g.classList.toggle('hidden', q.length>1);});
+  });
+
+  // 5) Progress (localStorage, optional)
+  var KEY='embedded-handbook-done', state={};
+  try{ state=JSON.parse(localStorage.getItem(KEY)||'{}')||{}; }catch(e){ state={}; }
+  var boxes=document.querySelectorAll('input[data-done]');
+  function render(){
+    var n=0;
+    boxes.forEach(function(b){
+      var id=b.dataset.done, on=!!state[id]; b.checked=on; if(on) n++;
+      var link=document.querySelector('nav.toc a[href="#'+id+'"]'); if(link) link.classList.toggle('done',on);
+    });
+    document.getElementById('progText').textContent='Đã ôn '+n+'/'+boxes.length+' kỹ năng';
+    document.getElementById('progBar').style.width=(boxes.length? n/boxes.length*100:0)+'%';
+  }
+  boxes.forEach(function(b){
+    b.addEventListener('change',function(){
+      state[b.dataset.done]=b.checked;
+      try{ localStorage.setItem(KEY,JSON.stringify(state)); }catch(e){}
+      render();
+    });
+  });
+  render();
+})();
+</script>
+
+<script>
+(function(){
+  var drawer=document.getElementById('drawer'), panel=drawer.querySelector('.panel');
+  var toc=document.querySelector('nav.toc').cloneNode(true); panel.appendChild(toc);
+  function sync(){ // mirror ✓ marks into drawer copy
+    document.querySelectorAll('nav.toc a').forEach(function(a){
+      var src=document.querySelector('.layout nav.toc a[href="'+a.getAttribute('href')+'"]');
+      if(src) a.classList.toggle('done',src.classList.contains('done'));
+    });
+    var p=document.getElementById('progText'); if(p) document.getElementById('curProg').textContent=p.textContent.replace(' kỹ năng','');
+  }
+  document.getElementById('openToc').addEventListener('click',function(){ sync(); drawer.hidden=false; });
+  document.getElementById('closeToc').addEventListener('click',function(){ drawer.hidden=true; });
+  drawer.addEventListener('click',function(e){ if(e.target===drawer || e.target.closest('a')) drawer.hidden=true; });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') drawer.hidden=true; });
+  document.addEventListener('change',function(e){ if(e.target.matches('input[data-done]')) setTimeout(sync,0); });
+
+  var sel=document.getElementById('mlevel');
+  sel.addEventListener('change',function(){ var b=document.querySelector('.toolbar button[data-f="'+sel.value+'"]'); if(b) b.click(); });
+  document.querySelectorAll('.toolbar button[data-f]').forEach(function(b){ b.addEventListener('click',function(){ sel.value=b.dataset.f; }); });
+
+  var top=document.getElementById('toTop');
+  top.addEventListener('click',function(){ window.scrollTo(0,0); });
+  var secs=[].slice.call(document.querySelectorAll('section.skill')), cur=document.getElementById('curSec');
+  var ticking=false;
+  window.addEventListener('scroll',function(){
+    if(ticking) return; ticking=true;
+    requestAnimationFrame(function(){
+      ticking=false; top.hidden = window.scrollY < 600;
+      var name='Embedded Handbook';
+      for(var i=0;i<secs.length;i++){ if(secs[i].getBoundingClientRect().top < 90){ var h=secs[i].querySelector('h2'); if(h) name=(h.childNodes[1]||h.childNodes[0]).textContent.trim()||h.textContent; } }
+      cur.firstChild.nodeValue=name;
+    });
+  },{passive:true});
+  sync();
+})();
+</script>
